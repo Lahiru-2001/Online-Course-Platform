@@ -1,0 +1,383 @@
+.course-details-page {
+    background: #EFF4FF;
+    min-height: 100vh;
+}
+
+.course-hero img {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+}
+
+.course-details-container {
+    max-width: 1450px;
+    margin: auto;
+    padding: 40px 40px 40px;
+    display: grid;
+    grid-template-columns: 65% 35%;
+    gap: 35px;
+    position: relative;
+}
+
+.course-left {
+    background: #EFF4FF;
+    top: 100px;
+}
+
+.course-left h1 {
+    font-size: 48px;
+    color: #111;
+    margin-bottom: 20px;
+}
+
+.course-left hr {
+    border: none;
+    height: 1px;
+    background: #d8d8d8;
+    margin: 20px 0;
+}
+
+.course-left h3 {
+    margin-bottom: 15px;
+}
+
+.course-left p {
+    line-height: 1.7;
+    color: #444;
+}
+
+.course-features {
+    background: #fff;
+    border-radius: 20px;
+    padding: 25px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 30px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, .08);
+}
+
+.course-features div {
+    border-right: 1px solid #ddd;
+    padding: 0 20px;
+}
+
+.course-features div:last-child {
+    border-right: none;
+}
+
+.rating-section {
+    display: flex;
+    gap: 40px;
+    margin-top: 50px;
+}
+
+.rating-card {
+    width: 220px;
+    background: white;
+    border-radius: 20px;
+    text-align: center;
+    padding: 25px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, .08);
+}
+
+.stars {
+    color: #FC772A;
+    margin: 10px 0;
+}
+
+.rating-bars {
+    flex: 1;
+}
+
+.bar-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 18px;
+}
+
+.bar-row span {
+    width: 70px;
+}
+
+.rating-bar {
+    flex: 1;
+    height: 8px;
+    background: #ddd;
+    border-radius: 20px;
+}
+
+.rating-fill {
+    width: 78%;
+    height: 100%;
+    background: #FC772A;
+    border-radius: 20px;
+}
+
+.review {
+    margin-top: 40px;
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.review-header img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.review-time {
+    margin-left: auto;
+    color: #888;
+}
+
+.course-right {
+    display: flex;
+    margin-top: -260px;
+    position: relative;
+    z-index: 10;
+}
+
+.purchase-card {
+    width: 100%;
+    background: #fff;
+    border-radius: 24px;
+    padding: 22px;
+    border: 1px solid #d7dde8;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, .12);
+
+    position: sticky;
+    top: 20px;
+}
+
+.purchase-image-wrapper {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.preview-image {
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+    display: block;
+}
+
+.price-section {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.price-section h2 {
+    font-size: 52px;
+    font-weight: 800;
+    color: #111;
+    margin-bottom: 10px;
+}
+
+.price-section h4 {
+    font-size: 20px;
+    color: #7d7d7d;
+    text-decoration: line-through;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.buy-btn {
+    width: 100%;
+    height: 58px;
+    border: none;
+    border-radius: 10px;
+    background: #FC772A;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.buy-btn:hover {
+    background: #ea681c;
+}
+
+.purchase-divider {
+    width: 100%;
+    height: 1px;
+    background: #d5d9df;
+    margin: 28px 0;
+}
+
+
+.included-section h3,
+.university-section h3,
+.share-section h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 18px;
+}
+
+.included-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.included-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.included-list i {
+    color: #FC772A;
+    width: 18px;
+}
+
+.university-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 260px;
+    background: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
+}
+
+.university-box img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+}
+
+.university-box span {
+    color: #222;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.share-icons {
+    display: flex;
+    gap: 14px;
+    margin-top: 10px;
+}
+
+.share-icons a {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #6b6a88;
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .3s;
+}
+
+.share-icons a:hover {
+    transform: translateY(-2px);
+}
+
+.share-icons .fa-youtube {
+    color: #fff;
+}
+
+.share-icons a:nth-child(3) {
+    background: #ff0000;
+}
+
+.recommend-section {
+    max-width: 1400px;
+    margin: auto;
+    padding: 40px 30px 80px;
+}
+
+.recommend-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.recommend-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+}
+
+.recommend-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.recommend-content {
+    padding: 15px;
+}
+
+.recommend-content span {
+    color: #666;
+    font-size: 13px;
+}
+
+.recommend-content h4 {
+    margin: 10px 0;
+    min-height: 50px;
+}
+
+.recommend-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.show-more-btn {
+    display: block;
+    margin: 30px auto 0;
+    background: #FC772A;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+@media(max-width:1200px) {
+    .course-details-container {
+        grid-template-columns: 1fr;
+    }
+
+    .recommend-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width:768px) {
+    .recommend-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .course-features {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .rating-section {
+        flex-direction: column;
+    }
+
+    .course-left h1 {
+        font-size: 32px;
+    }
+}
