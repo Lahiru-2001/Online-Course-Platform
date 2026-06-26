@@ -1,5 +1,6 @@
 import "./CourseDetails.css";
-
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 import courseImage from "../../assets/images/3.jpg";
 import universityLogo from "../../assets/images/Moratuwa.png";
 
@@ -41,6 +42,9 @@ function CourseDetails() {
 
     return (
         <div className="course-details-page">
+            {/* Navbar */}
+            <Navbar />
+
             {/* HERO */}
             <div className="course-hero">
                 <img src={courseImage} alt="Course" />
@@ -290,6 +294,10 @@ function CourseDetails() {
                 <button className="show-more-btn">
                     Show more
                 </button>
+            </div>
+            {/* Footer */}
+            <div className="dashboard-footer">
+                <Footer />
             </div>
         </div>
     );

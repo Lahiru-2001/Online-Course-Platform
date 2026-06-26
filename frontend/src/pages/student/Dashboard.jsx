@@ -1,5 +1,6 @@
 import StudentNavbar from "../../components/student/StudentNavbar";
 import StudentSidebar from "../../components/student/StudentSidebar";
+import Footer from "../../components/Footer";
 import "./Dashboard.css";
 
 function Dashboard() {
@@ -137,9 +138,8 @@ function Dashboard() {
                   <div className="bar-wrapper" key={index}>
 
                     <div
-                      className={`bar ${
-                        index === 5 ? "orange-bar" : ""
-                      }`}
+                      className={`bar ${index === 5 ? "orange-bar" : ""
+                        }`}
                       style={{ height: `${value * 2}px` }}
                     ></div>
 
@@ -191,20 +191,10 @@ function Dashboard() {
       </div>
 
       {/* Footer */}
-      <footer className="dashboard-footer">
 
-        <h2>LMS</h2>
-
-        <p>© 2024 LMS Sri Lanka. All Rights Reserved.</p>
-
-        <div className="footer-links">
-          <a href="#">Support</a>
-          <a href="#">Terms of Service</a>
-          <a href="#">Privacy Policy</a>
-          <a href="#">Contact Us</a>
-        </div>
-
-      </footer>
+      <div className="dashboard-footer">
+        <Footer />
+      </div>
 
     </div>
   );

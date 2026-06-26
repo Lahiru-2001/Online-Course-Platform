@@ -233,27 +233,6 @@
   color:#123d59;
 }
 
-/* FOOTER */
-
-.dashboard-footer{
-  background:#184B65;
-  color:white;
-  padding:25px 40px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.footer-links{
-  display:flex;
-  gap:25px;
-}
-
-.footer-links a{
-  color:white;
-  text-decoration:none;
-}
-
 /* RESPONSIVE */
 
 @media(max-width:1200px){
@@ -279,10 +258,5 @@
 
   .stats-grid{
     grid-template-columns:1fr;
-  }
-
-  .dashboard-footer{
-    flex-direction:column;
-    gap:15px;
   }
 }

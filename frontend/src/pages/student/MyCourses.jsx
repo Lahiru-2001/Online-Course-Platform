@@ -1,5 +1,6 @@
 import StudentNavbar from "../../components/student/StudentNavbar";
 import StudentSidebar from "../../components/student/StudentSidebar";
+import Footer from "../../components/Footer";
 import "./MyCourses.css";
 
 import courseImage from "../../assets/images/3.jpg";
@@ -118,18 +119,10 @@ function MyCourses() {
         </main>
       </div>
 
-      <footer className="dashboard-footer">
-        <h2>LMS</h2>
-
-        <p>© 2024 LMS Sri Lanka. All Rights Reserved.</p>
-
-        <div className="footer-links">
-          <a href="#">Support</a>
-          <a href="#">Terms of Service</a>
-          <a href="#">Privacy Policy</a>
-          <a href="#">Contact Us</a>
-        </div>
-      </footer>
+      {/* Footer */}
+            <div className="dashboard-footer">
+                <Footer />
+            </div>
     </div>
   );
 }
