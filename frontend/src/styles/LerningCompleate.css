@@ -37,39 +37,107 @@
   gap: 24px;
 }
 
-/* --- Hero Card --- */
-.banner-card {
-  background-color: #ffffff;
-  border: 1.5px solid #cbd5e1;
+/* --- Congratulations Hero Card --- */
+.congratulations-banner-card {
+  background-color: #dcfce7; /* Soft light-green background matching mockup */
+  border: 1.5px solid #bbf7d0;
   border-radius: 20px;
-  height: 360px;
-  padding: 16px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  min-height: 320px;
+  padding: 24px 32px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 32px;
   box-sizing: border-box;
   overflow: hidden;
   position: relative;
+  width: 100%;
 }
 
-.banner-image-wrapper {
-  position: relative;
+.congrats-left {
+  flex: 0 0 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.trophy-svg {
   width: 100%;
-  height: 100%;
+  max-width: 250px;
+  height: auto;
+}
+
+.congrats-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: #06283d;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.congrats-title {
+  font-size: 38px;
+  font-weight: 800;
+  color: #0c2d48; /* Dark navy blue from mockup */
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.congrats-desc {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #26374c;
+  margin: 0;
+}
+
+.congrats-stats-row {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  max-width: 500px;
+  margin-top: 8px;
+}
+
+.stats-card {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
   border-radius: 12px;
-  overflow: hidden;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  gap: 4px;
+}
+
+.stats-icon-circle {
+  font-size: 20px;
+  color: #1e293b;
+  margin-bottom: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #ffffff;
 }
 
-.banner-illustration {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+.stats-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.stats-value {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0c2d48;
+}
+
+.stats-value.status-completed {
+  color: #0c2d48;
 }
 
 /* --- Exit Portal Button --- */
@@ -616,4 +684,203 @@
 }
 .student-navbar .navbar-left p {
   margin: 4px 0 0 0;
+}
+
+/* --- Completed Quiz Section Overrides --- */
+.completed-quiz-card {
+  background-color: #dcfce7; /* Soft light-green background */
+  border: 1.5px solid #bbf7d0;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.quiz-circle-progress-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.progress-ring-svg {
+  width: 120px;
+  height: 120px;
+}
+
+.progress-ring-text {
+  font-size: 24px;
+  font-weight: 800;
+  fill: #0c2d48;
+}
+
+.quiz-results-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.small-trophy-svg {
+  width: 80px;
+  height: auto;
+}
+
+.quiz-result-heading {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0c2d48;
+  margin: 0;
+}
+
+.quiz-result-subtext {
+  font-size: 14px;
+  font-weight: 600;
+  color: #26374c;
+  margin: 0;
+}
+
+.completed-quiz-actions {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.review-answers-btn {
+  background-color: #1a4d6c; /* Dark teal button */
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: opacity 0.2s;
+}
+
+.review-answers-btn:hover {
+  opacity: 0.95;
+}
+
+.doc-completed-checkmark-svg {
+  width: 28px;
+  height: 28px;
+  display: block;
+}
+
+/* --- Completed Notes Section --- */
+.completed-notes-container {
+  background-color: #ebf2fc; /* Soft blue background matching mockup */
+  border-radius: 14px;
+  padding: 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.notes-heading {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0c2d48;
+  margin: 0;
+}
+
+.notes-takeaways {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.takeaways-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0c2d48;
+}
+
+.takeaways-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.takeaways-list li {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0c2d48;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.takeaways-list li::before {
+  content: "•";
+  color: #0c2d48;
+  font-size: 20px;
+}
+
+/* --- Completed Assignments Section Overrides --- */
+.assignment-status-tag.completed {
+  background-color: #ebf2fc;
+  color: #1e3a8a;
+  border: 1px solid #bfdbfe;
+}
+
+.assignment-sub-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.assignment-sub-row .assignment-description-text {
+  margin-bottom: 0;
+}
+
+.assignment-submitted-date {
+  font-size: 13px;
+  font-weight: 500;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.assignment-actions-row.completed-state {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 16px;
+}
+
+.assignment-actions-row.completed-state .assignment-file-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 480px;
+  box-sizing: border-box;
+}
+
+.assignment-grade-badge {
+  background-color: #dcfce7; /* Light green */
+  color: #15803d; /* Dark green */
+  border: 1px solid #bbf7d0;
+  border-radius: 9999px;
+  padding: 10px 24px;
+  font-size: 16px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
