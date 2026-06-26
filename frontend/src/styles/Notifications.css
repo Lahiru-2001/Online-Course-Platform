@@ -1,0 +1,256 @@
+/* Notifications Center Layout Styling */
+.notifications-layout {
+  min-height: 100vh;
+  background-color: #f7fafc;
+  /* Very light cool grey/blue background */
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  padding: 60px 24px;
+  box-sizing: border-box;
+}
+
+.notifications-container {
+  max-width: 800px;
+  /* Aligned with mockup width */
+  margin: 0 auto;
+  background-color: transparent;
+}
+
+.notifications-header-title {
+  font-size: 28px;
+  /* More refined modern size */
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 28px 0;
+  letter-spacing: -0.02em;
+}
+
+/* Tab controls layout */
+.notifications-tabs-row {
+  display: flex;
+  gap: 40px;
+  /* Refined layout gaps */
+  border-bottom: 1.5px solid #edf2f7;
+  margin-bottom: 32px;
+  padding-bottom: 0px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  /* Hide scrollbar for Firefox */
+  -ms-overflow-style: none;
+  /* Hide scrollbar for IE/Edge */
+}
+
+.notifications-tabs-row::-webkit-scrollbar {
+  display: none;
+  /* Hide scrollbar for Chrome, Safari, Opera */
+}
+
+.notifications-tab-btn {
+  background: none;
+  border: none;
+  padding: 10px 0;
+  /* Zero horizontal padding aligns the active line exactly to the text width */
+  font-size: 14px;
+  font-weight: 500;
+  color: #718096;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s, font-weight 0.2s;
+  white-space: nowrap;
+}
+
+.notifications-tab-btn:hover {
+  color: #0f172a;
+}
+
+.notifications-tab-btn.active {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.notifications-tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1.5px;
+  left: 0;
+  width: 100%;
+  height: 2.5px;
+  background-color: #f97316;
+  /* active orange border-bottom line */
+  border-radius: 2px;
+}
+
+/* Notifications feed list */
+.notifications-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.notification-card {
+  background-color: #ffffff;
+  border: 1.5px solid #edf2f7;
+  /* Lighter soft border */
+  border-radius: 16px;
+  /* 16px border-radius fits mockup perfectly */
+  padding: 22px 26px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.notification-card:hover {
+  box-shadow: 0 4px 12px rgba(148, 163, 184, 0.05);
+}
+
+/* Icon backgrounds */
+.notif-icon-circle {
+  width: 36px;
+  /* Compact icon size matching mockup */
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.notif-icon-circle.blue {
+  background-color: #3b82f6;
+  /* Premium brand blue for assignments */
+}
+
+.notif-icon-circle.green {
+  background-color: #10b981;
+  /* Green grade checkmark badge */
+}
+
+.notif-icon-circle.light-blue {
+  background-color: #0ea5e9;
+  /* Blue forum bubble */
+}
+
+.notif-icon-circle.orange-bg {
+  background-color: #f97316;
+  /* System updates */
+}
+
+.notif-svg-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+/* Text and inner alignments */
+.notif-content-wrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.notif-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  width: 100%;
+}
+
+.notif-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.notif-title-text {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+/* Pink unread indicator dot */
+.unread-badge-dot {
+  width: 5px;
+  height: 5px;
+  background-color: #ec4899;
+  /* hot pink dot */
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.notif-timestamp {
+  font-size: 12.5px;
+  color: #a0aec0;
+  white-space: nowrap;
+}
+
+.notif-body-text {
+  font-size: 13.5px;
+  color: #4a5568;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Action button "Mark as read" */
+.notif-action-btn {
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: #3b82f6;
+  /* blue link style */
+  cursor: pointer;
+  padding: 0;
+  width: fit-content;
+  text-align: left;
+  transition: opacity 0.2s;
+  margin-top: 4px;
+}
+
+.notif-action-btn:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.empty-notifications-card {
+  background-color: #ffffff;
+  border: 1.5px solid #edf2f7;
+  border-radius: 16px;
+  padding: 48px;
+  text-align: center;
+  color: #a0aec0;
+  font-size: 14px;
+}
+
+/* Responsive adjustment */
+@media (max-width: 600px) {
+  .notifications-tabs-row {
+    gap: 20px;
+  }
+
+  .notifications-tab-btn {
+    font-size: 13px;
+  }
+
+  .notification-card {
+    flex-direction: column;
+    gap: 14px;
+    padding: 18px 20px;
+  }
+
+  .notif-card-header {
+    flex-direction: column-reverse;
+    gap: 6px;
+  }
+
+  .notif-timestamp {
+    align-self: flex-start;
+  }
+}

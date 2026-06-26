@@ -9,6 +9,7 @@ import StudentDocuments from '../../components/student/StudentDocuments';
 import StudentMyNotes from '../../components/student/StudentMyNotes';
 import StudentAssignments from '../../components/student/StudentAssignments';
 import StudentLessonNavigation from '../../components/student/StudentLessonNavigation';
+import Footer from '../../components/Footer';
 
 const Learning = ({ onBackToLanding }) => {
   return (
@@ -68,6 +69,7 @@ const Learning = ({ onBackToLanding }) => {
           </div>
         </main>
       </div>
+      <Footer />
     </div>
   );
 };

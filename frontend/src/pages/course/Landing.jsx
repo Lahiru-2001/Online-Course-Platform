@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import CourseCard from '../../components/CourseCard';
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
 import '../../styles/Landing.css';
 
 // Import Banners
@@ -182,33 +184,14 @@ const Landing = ({ onGoToPortal }) => {
 
   return (
     <div className="landing-container">
+      <Navbar />
       {/* 1. Banner Carousel Section */}
       <div className="carousel-wrapper">
         <div className="carousel-content">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-            <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#0f172a' }}>Online Course Platform</span>
-            <button 
-              onClick={onGoToPortal} 
-              style={{
-                backgroundColor: '#f97316',
-                color: '#ffffff',
-                border: 'none',
-                padding: '8px 16px',
-                borderRadius: '8px',
-                fontWeight: '600',
-                fontSize: '13px',
-                cursor: 'pointer',
-                transition: 'background-color 0.2s'
-              }}
-              onMouseOver={(e) => e.target.style.backgroundColor = '#ea580c'}
-              onMouseOut={(e) => e.target.style.backgroundColor = '#f97316'}
-            >
-              Student Portal &rarr;
-            </button>
-          </div>
+
           <section className="carousel-section">
             <div className="carousel-viewport">
-              <div 
+              <div
                 className="carousel-track"
                 style={{ transform: `translateX(-${translationOffset}%)` }}
               >
@@ -218,9 +201,9 @@ const Landing = ({ onGoToPortal }) => {
                   </div>
                 ))}
               </div>
-              
-              <button 
-                className="carousel-next-btn" 
+
+              <button
+                className="carousel-next-btn"
                 onClick={handleNextSlide}
                 aria-label="Next slide"
               >
@@ -248,7 +231,7 @@ const Landing = ({ onGoToPortal }) => {
           {/* Most Popular Certificates Section */}
           <section className="certificates-section">
             <h2 className="section-title">Most Popular Certificates</h2>
-            
+
             <div className="certificates-grid">
               {popularCourses.map((course) => (
                 <CourseCard
@@ -273,7 +256,7 @@ const Landing = ({ onGoToPortal }) => {
           {/* Recently Viewed Products Section */}
           <section className="certificates-section" style={{ marginTop: '48px' }}>
             <h2 className="section-title">Recently Viewed Products</h2>
-            
+
             <div className="certificates-grid">
               {recentlyViewedCourses.map((course) => (
                 <CourseCard
@@ -302,7 +285,7 @@ const Landing = ({ onGoToPortal }) => {
         <div className="partners-content">
           <section className="partners-section">
             <h2 className="partners-title">Learn with 150+ leading universities and companies</h2>
-            
+
             <div className="partners-list">
               {/* Google */}
               <div className="partner-badge-pill">
@@ -343,7 +326,7 @@ const Landing = ({ onGoToPortal }) => {
         <div className="testimonials-content">
           <section className="testimonials-section">
             <h2 className="section-title text-center">Why people choose us</h2>
-            
+
             <div className="testimonials-grid">
               {testimonials.map((t) => (
                 <div className="testimonial-card" key={t.id}>
@@ -360,6 +343,7 @@ const Landing = ({ onGoToPortal }) => {
           </section>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

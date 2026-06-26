@@ -68,7 +68,8 @@
 }
 
 .forum-menu-item.active {
-  background-color: #f97316; /* Selected topic orange background */
+  background-color: #f97316;
+  /* Selected topic orange background */
 }
 
 .forum-menu-item.active .topic-name {
@@ -88,7 +89,8 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
-  background-color: #ebf2fc; /* Soft blue background matching mockup background */
+  background-color: #ebf2fc;
+  /* Soft blue background matching mockup background */
 }
 
 .forum-header {
@@ -108,7 +110,8 @@
 }
 
 .ask-question-btn {
-  background-color: #f97316; /* Ask question orange button */
+  background-color: #f97316;
+  /* Ask question orange button */
   color: #ffffff;
   border: none;
   border-radius: 9999px;
@@ -347,6 +350,7 @@
     transform: scale(0.95);
     opacity: 0;
   }
+
   to {
     transform: scale(1);
     opacity: 1;
@@ -354,7 +358,8 @@
 }
 
 .modal-header {
-  background-color: #133c55; /* Dark teal-blue header color from mockup */
+  background-color: #133c55;
+  /* Dark teal-blue header color from mockup */
   padding: 16px 24px;
   display: flex;
   align-items: center;
@@ -421,7 +426,8 @@
   border-radius: 8px;
   font-size: 14.5px;
   outline: none;
-  background-color: #f8fafc; /* Light gray background color */
+  background-color: #f8fafc;
+  /* Light gray background color */
   transition: all 0.2s ease;
   color: #334155;
   box-sizing: border-box;
@@ -450,12 +456,19 @@
   border-radius: 8px;
   font-size: 14.5px;
   outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   appearance: none;
-  background-color: #f8fafc; /* Light gray background color */
+  background-color: #f8fafc;
+  /* Light gray background color */
   transition: all 0.2s ease;
   cursor: pointer;
   color: #334155;
   box-sizing: border-box;
+}
+
+.modal-form-select::-ms-expand {
+  display: none;
 }
 
 .modal-form-select:focus {
@@ -477,7 +490,8 @@
   outline: none;
   resize: vertical;
   min-height: 140px;
-  background-color: #f8fafc; /* Light gray background color */
+  background-color: #f8fafc;
+  /* Light gray background color */
   transition: all 0.2s ease;
   color: #334155;
   box-sizing: border-box;
@@ -512,10 +526,12 @@
 }
 
 .modal-submit-btn {
-  background-color: #f97316; /* Submit orange button matching mockup */
+  background-color: #f97316;
+  /* Submit orange button matching mockup */
   color: #ffffff;
   border: none;
-  border-radius: 9999px; /* Pill shaped button */
+  border-radius: 9999px;
+  /* Pill shaped button */
   padding: 10px 32px;
   font-size: 15px;
   font-weight: 700;
