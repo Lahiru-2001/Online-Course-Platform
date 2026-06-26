@@ -14,12 +14,12 @@ const StudentQuiz = () => {
       <h3 className="card-heading">Quiz</h3>
       <div className="quiz-container">
         <p className="quiz-question">01. What does UI stand for?</p>
-        
+
         <div className="quiz-options-list">
           {quizOptions.map((option, idx) => {
             const isSelected = selectedQuizOption === idx;
             return (
-              <button 
+              <button
                 key={idx}
                 className={`quiz-option-item ${isSelected ? 'selected' : ''}`}
                 onClick={() => setSelectedQuizOption(idx)}

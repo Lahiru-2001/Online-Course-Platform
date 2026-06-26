@@ -5,16 +5,16 @@ const StudentVideoLesson = () => {
   return (
     <div className="learning-card">
       <h3 className="card-heading">Video Lesson</h3>
-      
+
       <div className="video-player-container">
         <img src={videoThumbnail} alt="UI/UX Design Fundamentals" className="video-thumbnail-img" />
-        
+
         {/* Video Player Controls Overlay */}
         <div className="video-controls-overlay">
           <div className="progress-bar-container">
             <div className="progress-bar-fill" style={{ width: '22%' }}></div>
           </div>
-          
+
           <div className="controls-row">
             <div className="controls-left">
               <button className="control-btn" aria-label="Play">
@@ -30,7 +30,7 @@ const StudentVideoLesson = () => {
               </button>
               <span className="video-time-display">05:30 / 25:10</span>
             </div>
-            
+
             <div className="controls-right">
               <button className="control-btn" aria-label="Mute/Unmute">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

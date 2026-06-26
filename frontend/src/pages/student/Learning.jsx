@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../styles/StudentPortal.css';
+import '../../styles/studentLerning.css';
 import uiuxBanner from '../../assets/uiux_banner.png';
 import StudentSidebar from '../../components/student/StudentSidebar';
 import StudentNavbar from '../../components/student/StudentNavbar';

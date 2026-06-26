@@ -8,11 +8,11 @@ const StudentAssignments = () => {
         <h3 className="card-heading">Assignments</h3>
         <span className="assignment-status-tag">On Progress</span>
       </div>
-      
+
       <p className="assignment-description-text">
         Design a mobile app login screen using UI/UX best practices.
       </p>
-      
+
       <div className="assignment-actions-row">
         <div className="assignment-file-box">
           <img src={pdfIcon} alt="PDF" className="doc-icon-img" />

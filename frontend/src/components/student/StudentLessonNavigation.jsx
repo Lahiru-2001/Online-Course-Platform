@@ -10,11 +10,11 @@ const StudentLessonNavigation = () => {
         </svg>
         Previous Lesson
       </button>
-      
+
       <button className="nav-btn-complete">
         Mark Lesson as Completed
       </button>
-      
+
       <button className="nav-btn-next">
         Next Lesson
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">

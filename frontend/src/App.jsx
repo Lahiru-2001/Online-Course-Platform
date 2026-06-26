@@ -4,7 +4,7 @@ import Learning from './pages/student/Learning';
 import './App.css';
 
 function App() {
-  // Default to 'learning' so the user's newly requested student learning page is rendered first
+  // Default to 'learning' so the student learning page is rendered first
   const [view, setView] = useState('learning');
 
   return (

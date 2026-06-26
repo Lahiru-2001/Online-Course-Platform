@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
+import { useState } from "react";
 import "./StudentSidebar.css";
 
-function StudentSidebar({ onBackToLanding }) {
+function StudentSidebar() {
   const [showDropdown, setShowDropdown] = useState(false);
 
   return (
@@ -16,60 +17,21 @@ function StudentSidebar({ onBackToLanding }) {
 
         <nav className="sidebar-menu">
 
-          <a
-            href="#"
-            className=""
-            onClick={(e) => {
-              e.preventDefault();
-            }}
+          <NavLink
+            to="/dashboard"
+            className={({ isActive }) => (isActive ? "active" : "")}
           >
             <i className="fa-solid fa-table-cells-large"></i>
             Dashboard
-          </a>
+          </NavLink>
 
-          <a
-            href="#"
-            className=""
-            onClick={(e) => {
-              e.preventDefault();
-            }}
+          <NavLink
+            to="/my-courses"
+            className={({ isActive }) => (isActive ? "active" : "")}
           >
             <i className="fa-solid fa-graduation-cap"></i>
             My Courses
-          </a>
-
-          <a
-            href="#"
-            className="active"
-            onClick={(e) => {
-              e.preventDefault();
-            }}
-          >
-            <i className="fa-solid fa-book-open"></i>
-            Learning
-          </a>
-
-          <a
-            href="#"
-            className=""
-            onClick={(e) => {
-              e.preventDefault();
-            }}
-          >
-            <i className="fa-solid fa-credit-card"></i>
-            Payment Review
-          </a>
-
-          <a
-            href="#"
-            className=""
-            onClick={(e) => {
-              e.preventDefault();
-            }}
-          >
-            <i className="fa-solid fa-award"></i>
-            Certificates
-          </a>
+          </NavLink>
 
         </nav>
 
@@ -109,13 +71,7 @@ function StudentSidebar({ onBackToLanding }) {
               Profile
             </a>
 
-            <a 
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                if (onBackToLanding) onBackToLanding();
-              }}
-            >
+            <a href="#">
               <i className="fa-solid fa-right-from-bracket"></i>
               Logout
             </a>

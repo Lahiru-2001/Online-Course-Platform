@@ -5,7 +5,7 @@ const StudentDocuments = () => {
   return (
     <div className="learning-card">
       <h3 className="card-heading">Documents</h3>
-      
+
       <div className="documents-list">
         {/* Item 1 (PDF) */}
         <div className="document-item">
