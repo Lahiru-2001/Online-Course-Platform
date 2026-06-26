@@ -1,40 +1,5 @@
 import React, { useState } from 'react';
-
-// Initial mock data for enrollments
-const initialEnrollments = [
-  {
-    id: 1,
-    name: 'Sithumini Perera',
-    course: 'ICT Masterclass 2024',
-    amount: '2,500',
-    time: '2 mins ago',
-    avatar: 'https://i.pravatar.cc/150?img=5'
-  },
-  {
-    id: 2,
-    name: 'Kasun Jayawardena',
-    course: 'Advanced React Architecture',
-    amount: '5,000',
-    time: '15 mins ago',
-    avatar: 'https://i.pravatar.cc/150?img=12'
-  },
-  {
-    id: 3,
-    name: 'Dilini Gunasekara',
-    course: 'English for IT Professionals',
-    amount: '1,800',
-    time: '1 hour ago',
-    avatar: 'https://i.pravatar.cc/150?img=42'
-  },
-  {
-    id: 4,
-    name: 'Arjun Silva',
-    course: 'ICT Masterclass 2024',
-    amount: '2,500',
-    time: '3 hours ago',
-    avatar: 'https://i.pravatar.cc/150?img=33'
-  }
-];
+import { initialEnrollments } from '../../data/mockData';
 
 const RecentEnrollments = () => {
   // State to hold recent enrollments data

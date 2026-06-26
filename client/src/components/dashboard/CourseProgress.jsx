@@ -1,29 +1,5 @@
 import React, { useState } from 'react';
-
-// Initial mock data for courses (could be fetched from API later)
-const initialCourses = [
-  {
-    id: 1,
-    title: 'Advanced React Architecture for Sri Lankan Fintech',
-    completion: 78,
-    students: 425,
-    earned: '125,000'
-  },
-  {
-    id: 2,
-    title: 'G.C.E. A/L ICT - Masterclass 2024',
-    completion: 45,
-    students: 812,
-    earned: '210,500'
-  },
-  {
-    id: 3,
-    title: 'English for IT Professionals - Level 01',
-    completion: 92,
-    students: 112,
-    earned: '65,800'
-  }
-];
+import { initialCourses } from '../../data/mockData';
 
 const CourseProgress = () => {
   // State to manage the list of courses
