@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Search } from 'lucide-react';
 import './CourseList.css';
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
 
 // SVG Illustrations for Course Cards (matching the screenshot designs)
 const CourseSVGs = {
@@ -346,6 +348,8 @@ export default function CourseList() {
     });
 
     return (
+        <div className="course-list-page-wrapper">
+        <Navbar />
         <div className="course-list-container">
             {/* Sidebar Filters */}
             <aside className="course-list-sidebar">
@@ -501,6 +505,8 @@ export default function CourseList() {
                     <button className="pagination-btn">&gt;</button>
                 </div>
             </main>
+        </div>
+        <Footer />
         </div>
     );
 }
