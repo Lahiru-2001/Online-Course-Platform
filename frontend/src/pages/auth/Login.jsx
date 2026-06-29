@@ -76,7 +76,7 @@ function Login({ onNavigate }) {
               </div>
 
               <button className="signin-btn">Sign In</button>
-
+              
               <div className="social-divider">
                 <span className="divider-line" />
                 <span className="divider-text">or continue with</span>
