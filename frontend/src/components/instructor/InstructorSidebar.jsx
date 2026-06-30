@@ -1,7 +1,9 @@
 import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './InstructorSidebar.css';
 
 export default function InstructorSidebar({ activeMenu = 'Performance' }) {
+  const navigate = useNavigate();
   return (
     <aside className="instructor-sidebar">
       <div className="sidebar-top-section">
@@ -16,10 +18,10 @@ export default function InstructorSidebar({ activeMenu = 'Performance' }) {
             <span>Overview</span>
           </a>
           
-          <a href="#courses" className={activeMenu === 'My Courses' ? 'active' : ''}>
+          <Link to="/manage-course" className={activeMenu === 'My Courses' ? 'active' : ''}>
             <i className="fa-solid fa-book-open"></i>
             <span>My Courses</span>
-          </a>
+          </Link>
 
           <a href="#enrollments" className={activeMenu === 'Enrollments' ? 'active' : ''}>
             <i className="fa-solid fa-user-check"></i>
@@ -31,15 +33,15 @@ export default function InstructorSidebar({ activeMenu = 'Performance' }) {
             <span>Earnings (LKR)</span>
           </a>
 
-          <a href="#admin" className={activeMenu === 'Admin Panel' ? 'active' : ''}>
+          <Link to="/user-management" className={activeMenu === 'Admin Panel' ? 'active' : ''}>
             <i className="fa-solid fa-user-shield"></i>
             <span>Admin Panel</span>
-          </a>
+          </Link>
         </nav>
       </div>
 
       <div className="sidebar-bottom-section">
-        <button className="btn-create-course">
+        <button className="btn-create-course" onClick={() => navigate('/courses/create')}>
           <i className="fa-solid fa-plus"></i> Create New Course
         </button>
 
@@ -51,10 +53,10 @@ export default function InstructorSidebar({ activeMenu = 'Performance' }) {
             <span>Help Center</span>
           </a>
           
-          <a href="#logout" className="secondary-link logout-btn">
+          <Link to="/login" className="secondary-link logout-btn">
             <i className="fa-solid fa-right-from-bracket"></i>
             <span>Log Out</span>
-          </a>
+          </Link>
         </nav>
       </div>
     </aside>

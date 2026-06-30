@@ -51,7 +51,7 @@ function UserProfile() {
         {/* Page header row */}
         <div className="up-page-header">
           <h2 className="up-page-title">Profile Overview</h2>
-          <Link to="/edit-profile" className="up-btn-primary">Edit Profile</Link>
+          <button onClick={() => navigate('/edit-profile')} className="up-btn-primary">Edit Profile</button>
         </div>
 
         {/* Profile Info Card */}

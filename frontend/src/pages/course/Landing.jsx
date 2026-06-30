@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CourseCard from '../../components/CourseCard';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -38,6 +39,7 @@ import avatar4Img from '../../assets/images (2).jpg';
 const Landing = ({ onGoToPortal }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const navigate = useNavigate();
 
   // Banners
   const banners = [
@@ -247,7 +249,7 @@ const Landing = ({ onGoToPortal }) => {
             </div>
 
             <div className="show-more-container">
-              <button className="show-more-btn">
+              <button className="show-more-btn" onClick={() => navigate('/course-list')}>
                 Show more
               </button>
             </div>
@@ -272,7 +274,7 @@ const Landing = ({ onGoToPortal }) => {
             </div>
 
             <div className="show-more-container">
-              <button className="show-more-btn">
+              <button className="show-more-btn" onClick={() => navigate('/course-list')}>
                 Show more
               </button>
             </div>

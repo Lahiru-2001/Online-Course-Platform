@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import "./StudentNavbar.css";
 
 function StudentNavbar() {
+  const navigate = useNavigate();
   return (
     <header className="student-navbar">
 
@@ -27,7 +29,7 @@ function StudentNavbar() {
 
         </div>
 
-        <button className="notification-btn">
+        <button className="notification-btn" onClick={() => navigate('/notifications')}>
           <i className="fa-regular fa-bell"></i>
         </button>
 

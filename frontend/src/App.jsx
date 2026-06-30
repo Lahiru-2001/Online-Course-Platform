@@ -72,7 +72,11 @@ function NotificationsWrapper() {
 function LoginWrapper() {
   const navigate = useNavigate();
   const handleNavigate = (page) => {
-    if (page === 'register') navigate('/register');
+    if (page === 'admin') navigate('/user-management');
+    else if (page === 'instructor') navigate('/dashboard');
+    else if (page === 'student') navigate('/learning');
+    else if (page === 'home') navigate('/');
+    else if (page === 'register') navigate('/register');
     else if (page === 'forgot') navigate('/forgot-password');
     else navigate('/login');
   };
@@ -82,7 +86,11 @@ function LoginWrapper() {
 function RegisterWrapper() {
   const navigate = useNavigate();
   const handleNavigate = (page) => {
-    if (page === 'login') navigate('/login');
+    if (page === 'admin') navigate('/user-management');
+    else if (page === 'instructor') navigate('/dashboard');
+    else if (page === 'student') navigate('/learning');
+    else if (page === 'home') navigate('/');
+    else if (page === 'login') navigate('/login');
     else navigate('/register');
   };
   return <Register onNavigate={handleNavigate} />;

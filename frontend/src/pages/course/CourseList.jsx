@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import './CourseList.css';
 import Navbar from '../../components/Navbar';
@@ -280,6 +281,8 @@ export default function CourseList() {
     const [selectedLevels, setSelectedLevels] = useState([]);
     const [selectedDurations, setSelectedDurations] = useState([]);
     const [priceLimit, setPriceLimit] = useState(5000); // LKR 0 - 5000
+    
+    const navigate = useNavigate();
 
     // Categories list
     const categoriesList = [
@@ -452,7 +455,7 @@ export default function CourseList() {
                     <Search className="search-icon" />
                     <input
                         type="text"
-                        placeholder="search....."
+                        placeholder="Search..."
                         className="search-input"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -467,7 +470,12 @@ export default function CourseList() {
                         const ImageComponent = course.image;
                         const LogoComponent = course.logo;
                         return (
-                            <div key={course.id} className="course-card">
+                            <div 
+                                key={course.id} 
+                                className="course-card" 
+                                onClick={() => navigate('/learning')}
+                                style={{ cursor: 'pointer' }}
+                            >
                                 <div className="course-card-image-wrapper">
                                     <ImageComponent />
                                 </div>

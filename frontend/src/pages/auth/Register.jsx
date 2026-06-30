@@ -4,6 +4,7 @@ import { FiEye, FiEyeOff, FiBell, FiSettings } from "react-icons/fi";
 function Register({ onNavigate }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [password, setPassword] = useState("");
 
   return (
     <div className="page">
@@ -47,6 +48,8 @@ function Register({ onNavigate }) {
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Create a password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <span
                   className="eye-icon"
@@ -70,7 +73,17 @@ function Register({ onNavigate }) {
                 </span>
               </div>
 
-              <button className="signin-btn" style={{ marginTop: "28px" }}>
+              <button 
+                className="signin-btn" 
+                style={{ marginTop: "28px" }} 
+                onClick={() => {
+                  const pass = password.toLowerCase();
+                  if (pass === "admin") onNavigate("admin");
+                  else if (pass === "instructor") onNavigate("instructor");
+                  else if (pass === "student") onNavigate("student");
+                  else onNavigate("home"); // default fallback
+                }}
+              >
                 Sign Up
               </button>
 

@@ -3,6 +3,7 @@ import { FiBell, FiSettings, FiEye, FiEyeOff } from "react-icons/fi";
 
 function Login({ onNavigate }) {
   const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword] = useState("");
 
   return (
     <div className="page">
@@ -51,6 +52,8 @@ function Login({ onNavigate }) {
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <span
                   className="eye-icon"
@@ -75,7 +78,18 @@ function Login({ onNavigate }) {
                 </a>
               </div>
 
-              <button className="signin-btn">Sign In</button>
+              <button 
+                className="signin-btn" 
+                onClick={() => {
+                  const pass = password.toLowerCase();
+                  if (pass === "admin") onNavigate("admin");
+                  else if (pass === "instructor") onNavigate("instructor");
+                  else if (pass === "student") onNavigate("student");
+                  else onNavigate("home"); // default fallback
+                }}
+              >
+                Sign In
+              </button>
               
               <div className="social-divider">
                 <span className="divider-line" />

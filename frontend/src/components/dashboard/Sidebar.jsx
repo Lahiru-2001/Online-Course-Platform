@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
   // State to track which menu item is currently active
   const [activeTab, setActiveTab] = useState('Overview');
+  const navigate = useNavigate();
 
   // Handle navigation clicks
-  const handleNavClick = (e, tabName) => {
+  const handleNavClick = (e, tabName, route) => {
     e.preventDefault();
     setActiveTab(tabName);
-    // TODO: In a real app, this would use React Router's useNavigate or Link
-    console.log(`Navigating to ${tabName}`);
+    if (route) navigate(route);
   };
 
   return (
@@ -37,8 +38,8 @@ const Sidebar = () => {
           <li className="nav-item">
             <a 
               href="#" 
-              className={`nav-link ${activeTab === 'My Courses' ? 'active' : ''}`}
-              onClick={(e) => handleNavClick(e, 'My Courses')}
+              className={`nav-link ${activeTab === 'Courses' ? 'active' : ''}`}
+              onClick={(e) => handleNavClick(e, 'Courses', '/courses/create')}
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
               My Courses
@@ -94,7 +95,7 @@ const Sidebar = () => {
             <a 
               href="#" 
               className="nav-link logout"
-              onClick={(e) => { e.preventDefault(); console.log('Logging out user...'); }}
+              onClick={(e) => { e.preventDefault(); navigate('/login'); }}
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
               Log Out

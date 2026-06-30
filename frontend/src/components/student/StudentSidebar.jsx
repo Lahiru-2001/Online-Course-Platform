@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { useState } from "react";
 import "./StudentSidebar.css";
 
@@ -18,8 +18,10 @@ function StudentSidebar() {
         <nav className="sidebar-menu">
 
           <NavLink
-            to="/dashboard"
+            to="#"
             className={({ isActive }) => (isActive ? "active" : "")}
+            style={{ pointerEvents: "none", opacity: 0.6 }}
+            onClick={(e) => e.preventDefault()}
           >
             <i className="fa-solid fa-table-cells-large"></i>
             Dashboard
@@ -66,15 +68,15 @@ function StudentSidebar() {
         {showDropdown && (
           <div className="user-dropdown">
 
-            <a href="#">
+            <Link to="/user-profile">
               <i className="fa-regular fa-user"></i>
               Profile
-            </a>
+            </Link>
 
-            <a href="#">
+            <Link to="/login">
               <i className="fa-solid fa-right-from-bracket"></i>
               Logout
-            </a>
+            </Link>
 
           </div>
         )}

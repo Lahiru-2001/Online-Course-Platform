@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -9,8 +10,8 @@ const Navbar = () => {
       <div className="navbar-left">
         <h1 className="navbar-logo">LMS</h1>
         <ul className="navbar-links">
-          <li><a href="#" className="active">Home</a></li>
-          <li><a href="#">Courses</a></li>
+          <li><Link to="/" className="active">Home</Link></li>
+          <li><Link to="/course-list">Courses</Link></li>
         </ul>
       </div>
       
@@ -33,9 +34,9 @@ const Navbar = () => {
         </button>
         
         {/* User Profile Avatar */}
-        <div className="user-avatar" role="button" tabIndex="0">
+        <Link to="/user-profile" className="user-avatar" role="button" tabIndex="0">
           <img src="https://i.pravatar.cc/150?img=11" alt="Current User" />
-        </div>
+        </Link>
       </div>
       
     </nav>
