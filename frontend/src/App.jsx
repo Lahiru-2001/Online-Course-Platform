@@ -8,7 +8,7 @@ import './App.css';
 
 function App() {
   // Set default view to 'Notifications' so the notifications page displays immediately
-  const [view, setView] = useState('learning');
+  const [view, setView] = useState('Notifications');
 
   return (
     <div className="App">
