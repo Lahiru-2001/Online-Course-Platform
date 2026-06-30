@@ -1,9 +1,12 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './Navbar.css';
 
 const Navbar = () => {
+    const location = useLocation();
+    const isHomePage = location.pathname === '/';
+
     return (
         <nav className="navbar">
 
@@ -34,10 +37,16 @@ const Navbar = () => {
                     </svg>
                 </button>
 
-                {/* User Profile Avatar */}
-                <Link to="/user-profile" className="user-avatar" role="button" tabIndex="0">
-                    <img src="https://i.pravatar.cc/150?img=11" alt="Current User" />
-                </Link>
+                {/* User Profile Avatar / Login text */}
+                {isHomePage ? (
+                    <Link to="/login" className="login-nav-link" style={{ textDecoration: 'none', color: '#ff7a00', fontWeight: '600', marginLeft: '12px', fontSize: '15px' }}>
+                        Login
+                    </Link>
+                ) : (
+                    <Link to="/user-profile" className="user-avatar" role="button" tabIndex="0">
+                        <img src="https://i.pravatar.cc/150?img=11" alt="Current User" />
+                    </Link>
+                )}
             </div>
 
         </nav>
