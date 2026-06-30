@@ -26,9 +26,9 @@ export default function InstructorSidebar({ activeMenu = 'Performance' }) {
             <span>Enrollments</span>
           </a>
 
-          <a href="#performance" className={activeMenu === 'Performance' ? 'active' : ''}>
-            <i className="fa-solid fa-award"></i>
-            <span>Performance</span>
+          <a href="#earnings" className={activeMenu === 'Earnings (LKR)' ? 'active' : ''}>
+            <i className="fa-solid fa-coins"></i>
+            <span>Earnings (LKR)</span>
           </a>
 
           <a href="#admin" className={activeMenu === 'Admin Panel' ? 'active' : ''}>

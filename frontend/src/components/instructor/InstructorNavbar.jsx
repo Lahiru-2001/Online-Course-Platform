@@ -1,7 +1,7 @@
 import React from 'react';
 import './InstructorNavbar.css';
 
-export default function InstructorNavbar({ activeLink = 'Reports' }) {
+export default function InstructorNavbar({ activeLink = 'Reports', searchPlaceholder = 'Search students...' }) {
   return (
     <header className="instructor-navbar">
       <div className="navbar-brand-sec">
@@ -17,7 +17,7 @@ export default function InstructorNavbar({ activeLink = 'Reports' }) {
 
       <div className="navbar-right-sec">
         <div className="search-students-box">
-          <input type="text" placeholder="Search students..." />
+          <input type="text" placeholder={searchPlaceholder} />
           <i className="fa-solid fa-magnifying-glass"></i>
         </div>
 
