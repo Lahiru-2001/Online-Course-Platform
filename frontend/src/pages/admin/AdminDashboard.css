@@ -1,0 +1,424 @@
+/* ADMIN LAYOUT */
+
+.admin-dashboard {
+    min-height: 100vh;
+    background: #EFF4FF;
+}
+
+.admin-body {
+    display: flex;
+    align-items: flex-start;
+}
+
+.admin-main {
+    flex: 1;
+    padding: 35px;
+    overflow-x: hidden;
+}
+
+/*HEADER */
+
+.overview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+    gap: 20px;
+}
+
+.overview-header h1 {
+    font-size: 42px;
+    color: #103D59;
+    margin-bottom: 8px;
+}
+
+.overview-header p {
+    color: #667085;
+    font-size: 16px;
+}
+
+.overview-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.date-btn,
+.export-btn {
+    height: 52px;
+    border: none;
+    border-radius: 10px;
+    padding: 0 22px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.date-btn {
+    background: #dbe8ff;
+    color: #103D59;
+}
+
+.export-btn {
+    background: #123d59;
+    color: white;
+}
+
+/* STAT CARDS */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+    margin-bottom: 30px;
+}
+
+.stat-card,
+.income-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, .05);
+}
+
+.stat-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.blue {
+    background: #DDEEFF;
+    color: #0F4763;
+}
+
+.peach {
+    background: #FFE7DA;
+    color: #FC772A;
+}
+
+.yellow {
+    background: #FFF2D9;
+    color: #d18b00;
+}
+
+.green {
+    color: #12b76a;
+    font-weight: 700;
+}
+
+.orange {
+    color: #f97316;
+    font-weight: 700;
+}
+
+.stat-card span:last-child {
+    color: #667085;
+}
+
+.stat-card h2 {
+    margin-top: 10px;
+    color: #103D59;
+    font-size: 40px;
+}
+
+.income-card {
+    background: #174D68;
+    color: white;
+}
+
+.income-card span {
+    float: right;
+    color: #d8e4ec;
+}
+
+.income-icon {
+    width: 48px;
+    height: 48px;
+    background: #FC772A;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.income-card p {
+    margin: 10px 0;
+}
+
+.income-card h2 {
+    font-size: 42px;
+}
+
+/*MIDDLE GRID */
+
+.middle-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.revenue-card,
+.status-card {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, .05);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.card-header h2 {
+    color: #103D59;
+}
+
+.card-header select {
+    border: 1px solid #ddd;
+    padding: 8px 14px;
+    border-radius: 8px;
+}
+
+/*BAR CHART */
+
+.bar-chart {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 280px;
+}
+
+.bar-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.bar {
+    width: 45px;
+    border-radius: 10px 10px 0 0;
+}
+
+.bar-column span {
+    color: #667085;
+    font-weight: 600;
+}
+
+/*STATUS */
+
+.status-card h2 {
+    margin-bottom: 25px;
+    color: #103D59;
+}
+
+.status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    font-size: 15px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.dot.green {
+    background: #22c55e;
+}
+
+.dot.orange {
+    background: #fb923c;
+}
+
+.status-card h4 {
+    margin: 25px 0 15px;
+    color: #667085;
+}
+
+.storage-bar {
+    width: 100%;
+    height: 10px;
+    background: #E4E7EC;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.storage-fill {
+    width: 78%;
+    height: 100%;
+    background: #FC772A;
+}
+
+.storage-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #667085;
+}
+
+/*APPROVAL TABLE */
+
+.approval-card {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, .05);
+    margin-bottom: 35px;
+}
+
+.approval-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.approval-header h2 {
+    color: #103D59;
+}
+
+.approval-header p {
+    color: #667085;
+    margin-top: 5px;
+}
+
+.approval-header a {
+    color: #0F4763;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    text-align: left;
+    padding: 16px;
+    background: #F8FAFC;
+    color: #667085;
+}
+
+td {
+    padding: 18px 16px;
+    border-top: 1px solid #EDF2F7;
+}
+
+.applicant {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.applicant img {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.applicant strong {
+    display: block;
+    color: #103D59;
+}
+
+.applicant span {
+    font-size: 13px;
+    color: #667085;
+}
+
+.pending {
+    background: #FFF4E5;
+    color: #F97316;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.action-icons {
+    display: flex;
+    gap: 18px;
+    font-size: 20px;
+}
+
+.approve {
+    color: #16a34a;
+}
+
+.reject {
+    color: #dc2626;
+}
+
+.view {
+    color: #123d59;
+}
+
+/*RESPONSIVE*/
+
+@media(max-width:1200px) {
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .middle-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media(max-width:768px) {
+
+    .admin-body {
+        flex-direction: column;
+    }
+
+    .admin-main {
+        padding: 20px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .overview-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .overview-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .date-btn,
+    .export-btn {
+        width: 100%;
+    }
+}
