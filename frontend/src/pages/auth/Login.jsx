@@ -4,6 +4,7 @@ import { FiBell, FiSettings, FiEye, FiEyeOff } from "react-icons/fi";
 function Login({ onNavigate }) {
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
 
   return (
     <div className="page">
@@ -43,9 +44,17 @@ function Login({ onNavigate }) {
             <div className="login-card">
               <h2>Welcome Back</h2>
               <p className="subtitle">Please enter your details to sign in.</p>
+              <p className="hint-text" style={{ fontSize: "12px", color: "#f97316", background: "#fff3eb", padding: "8px 12px", borderRadius: "6px", marginBottom: "16px", borderLeft: "3px solid #f97316" }}>
+                <strong>Testing Hint:</strong> Enter <strong>student</strong>, <strong>instructor</strong>, or <strong>admin</strong> as the password to view different dashboards.
+              </p>
 
               <label>Email Address</label>
-              <input type="email" placeholder="Enter your email" />
+              <input 
+                type="email" 
+                placeholder="Enter your email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
 
               <label>Password</label>
               <div className="password-box">
@@ -81,7 +90,7 @@ function Login({ onNavigate }) {
               <button 
                 className="signin-btn" 
                 onClick={() => {
-                  const pass = password.toLowerCase();
+                  const pass = password.toLowerCase().trim();
                   if (pass === "admin") onNavigate("admin");
                   else if (pass === "instructor") onNavigate("instructor");
                   else if (pass === "student") onNavigate("student");

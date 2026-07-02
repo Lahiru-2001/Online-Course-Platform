@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const BasicInfoForm = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: '',
     category: 'Mathematics',
@@ -15,6 +17,7 @@ const BasicInfoForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Form data to save:', formData);
+    navigate('/upload-material');
   };
 
   return (

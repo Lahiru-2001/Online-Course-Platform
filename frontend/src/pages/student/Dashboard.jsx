@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import StudentNavbar from "../../components/student/StudentNavbar";
 import StudentSidebar from "../../components/student/StudentSidebar";
 import Footer from "../../components/Footer";
@@ -104,7 +105,7 @@ function Dashboard() {
 
               <div className="card-header">
                 <h2>Course Progress Summary</h2>
-                <span>View All Courses</span>
+                <Link to="/student/my-courses" className="view-all-link">View All Courses →</Link>
               </div>
 
               {progressData.map((item, index) => (
@@ -115,9 +116,9 @@ function Dashboard() {
                     <span>{item.progress}% Completion</span>
                   </div>
 
-                  <div className="progress-bar">
+                  <div className="dash-progress-bar">
                     <div
-                      className="progress-fill"
+                      className="dash-progress-fill"
                       style={{ width: `${item.progress}%` }}
                     ></div>
                   </div>

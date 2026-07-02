@@ -1,9 +1,14 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './InstructorSidebar.css';
 
-export default function InstructorSidebar({ activeMenu = 'Performance' }) {
+export default function InstructorSidebar() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const path = location.pathname;
+
+  const isActive = (route) => path === route || path.startsWith(route + '/');
+
   return (
     <aside className="instructor-sidebar">
       <div className="sidebar-top-section">
@@ -13,27 +18,27 @@ export default function InstructorSidebar({ activeMenu = 'Performance' }) {
         </div>
 
         <nav className="sidebar-navigation-menu">
-          <a href="#overview" className={activeMenu === 'Overview' ? 'active' : ''}>
+          <Link to="/admin/dashboard" className={isActive('/admin/dashboard') ? 'active' : ''}>
             <i className="fa-solid fa-chart-pie"></i>
             <span>Overview</span>
-          </a>
+          </Link>
           
-          <Link to="/manage-course" className={activeMenu === 'My Courses' ? 'active' : ''}>
+          <Link to="/admin/courses" className={isActive('/admin/courses') ? 'active' : ''}>
             <i className="fa-solid fa-book-open"></i>
             <span>My Courses</span>
           </Link>
 
-          <a href="#enrollments" className={activeMenu === 'Enrollments' ? 'active' : ''}>
-            <i className="fa-solid fa-user-check"></i>
-            <span>Enrollments</span>
-          </a>
-
-          <a href="#earnings" className={activeMenu === 'Earnings (LKR)' ? 'active' : ''}>
+          <Link to="/admin/earnings" className={isActive('/admin/earnings') ? 'active' : ''}>
             <i className="fa-solid fa-coins"></i>
             <span>Earnings (LKR)</span>
-          </a>
+          </Link>
 
-          <Link to="/user-management" className={activeMenu === 'Admin Panel' ? 'active' : ''}>
+          <Link to="/admin/reports" className={isActive('/admin/reports') ? 'active' : ''}>
+            <i className="fa-solid fa-chart-line"></i>
+            <span>Reports</span>
+          </Link>
+
+          <Link to="/admin/users" className={isActive('/admin/users') ? 'active' : ''}>
             <i className="fa-solid fa-user-shield"></i>
             <span>Admin Panel</span>
           </Link>
@@ -41,19 +46,19 @@ export default function InstructorSidebar({ activeMenu = 'Performance' }) {
       </div>
 
       <div className="sidebar-bottom-section">
-        <button className="btn-create-course" onClick={() => navigate('/courses/create')}>
+        <button className="btn-create-course" onClick={() => navigate('/admin/create-course')}>
           <i className="fa-solid fa-plus"></i> Create New Course
         </button>
 
         <hr className="sidebar-divider" />
 
         <nav className="sidebar-secondary-menu">
-          <a href="#help" className="secondary-link">
-            <i className="fa-regular fa-circle-question"></i>
-            <span>Help Center</span>
-          </a>
+          <Link to="/admin/settings" className={`secondary-link ${isActive('/admin/settings') ? 'active' : ''}`}>
+            <i className="fa-solid fa-sliders"></i>
+            <span>Settings</span>
+          </Link>
           
-          <Link to="/login" className="secondary-link logout-btn">
+          <Link to="/" className="secondary-link logout-btn">
             <i className="fa-solid fa-right-from-bracket"></i>
             <span>Log Out</span>
           </Link>

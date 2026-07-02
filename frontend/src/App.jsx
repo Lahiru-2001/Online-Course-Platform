@@ -1,162 +1,120 @@
 import React from 'react';
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
-// ─── Dinisuru's Pages ───
-import Landing from './pages/course/Landing';
-import Learning from './pages/student/Learning';
-import LerningCompleate from './pages/student/LerningCompleate';
-import Forum from './pages/student/Forum';
-import Notifications from './pages/student/Notifications';
+// Layouts
+import MainLayout from './layouts/MainLayout';
+import StudentLayout from './layouts/StudentLayout';
+import InstructorLayout from './layouts/InstructorLayout';
+import AdminLayout from './layouts/AdminLayout';
 
-// ─── Chamindu's Pages ───
-import Login from './pages/auth/Login';
-import Register from './pages/auth/Register';
-import ForgotPassword from './pages/auth/ForgotPassword';
-import AdminPayment from './pages/admin/AdminPayment';
-import ManageCourse from './pages/instructor/ManageCourse';
-import UploadMaterial from './pages/instructor/UploadMaterial';
-import ChatPage from './pages/communication/ChatPage';
+// Public Pages
+import Landing from './pages/public/Landing';
+import CourseListing from './pages/public/CourseListing';
+import CourseDetails from './pages/public/CourseDetails';
+import Login from './pages/public/Login';
+import Register from './pages/public/Register';
+import ForgotPassword from './pages/public/ForgotPassword';
+import Forum from './pages/public/Forum';
+import Notifications from './pages/public/Notifications';
+import ChatPage from './pages/public/ChatPage';
+import CourseContents from './pages/public/CourseContents';
 
-// ─── Gihan's Pages ───
-import CourseList from './pages/course/CourseList';
-import UserProfile from './pages/student/UserProfile';
+// Protected Student Pages
+import StudentDashboard from './pages/student/StudentDashboard';
+import MyCourses from './pages/student/MyCourses';
+import LearnLesson from './pages/student/LearnLesson';
+import LearnCompleted from './pages/student/LearnCompleted';
+import Payments from './pages/student/Payments';
+import Certificates from './pages/student/Certificates';
+import StudentProfile from './pages/student/StudentProfile';
 import EditProfile from './pages/student/EditProfile';
-import Certificate from './pages/student/Certificate';
-import ProgressTracking from './pages/student/ProgressTracking';
-import UserManagement from './pages/instructor/UserManagement';
 
-// ─── Dammika's Pages ───
-import AuthPage from './pages/AuthPage';
-import DashboardPage from './pages/DashboardPage';
-import CreateCoursePage from './pages/CreateCoursePage';
-import AuthLayout from './components/layout/AuthLayout';
-import DashboardLayout from './components/layout/DashboardLayout';
+// Protected Instructor Pages
+import InstructorDashboard from './pages/instructor/InstructorDashboard';
+import ManageCourses from './pages/instructor/ManageCourses';
+import CreateCourse from './pages/instructor/CreateCourse';
+import UploadMaterial from './pages/instructor/UploadMaterial';
+import Earnings from './pages/instructor/Earnings';
+import InstructorProfile from './pages/instructor/InstructorProfile';
 
-// ─── Styles ───
-import './App.css';
-import './styles/auth.css';
+// Protected Admin Pages
+import AdminDashboard from './pages/admin/AdminDashboard';
+import UserManagement from './pages/admin/UserManagement';
+import CourseManagement from './pages/admin/CourseManagement';
+import Reports from './pages/admin/Reports';
+import AdminProfile from './pages/admin/AdminProfile';
+import AdminPayment from './pages/admin/AdminPayment';
 
-// ─── Wrappers for Dinisuru's pages (callback-based navigation → React Router) ───
-function LandingWrapper() {
-  const navigate = useNavigate();
-  return <Landing onGoToPortal={() => navigate('/learning')} />;
-}
+// UI Helpers
+import ProtectedRoute from './components/ui/ProtectedRoute';
 
-function LearningWrapper() {
-  const navigate = useNavigate();
-  return <Learning onBackToLanding={() => navigate('/')} />;
-}
-
-function LerningCompleateWrapper() {
-  const navigate = useNavigate();
-  return <LerningCompleate onBackToLanding={() => navigate('/')} />;
-}
-
-function ForumWrapper() {
-  const navigate = useNavigate();
-  return <Forum onBackToLanding={() => navigate('/')} />;
-}
-
-function NotificationsWrapper() {
-  const navigate = useNavigate();
-  return (
-    <Notifications
-      onBackToLanding={() => navigate('/')}
-      onNavigateToForum={() => navigate('/forum')}
-      onNavigateToLearning={() => navigate('/learning')}
-    />
-  );
-}
-
-// ─── Wrappers for Chamindu's auth pages (callback-based navigation → React Router) ───
-function LoginWrapper() {
-  const navigate = useNavigate();
-  const handleNavigate = (page) => {
-    if (page === 'admin') navigate('/user-management');
-    else if (page === 'instructor') navigate('/dashboard');
-    else if (page === 'student') navigate('/learning');
-    else if (page === 'home') navigate('/');
-    else if (page === 'register') navigate('/register');
-    else if (page === 'forgot') navigate('/forgot-password');
-    else navigate('/login');
-  };
-  return <Login onNavigate={handleNavigate} />;
-}
-
-function RegisterWrapper() {
-  const navigate = useNavigate();
-  const handleNavigate = (page) => {
-    if (page === 'admin') navigate('/user-management');
-    else if (page === 'instructor') navigate('/dashboard');
-    else if (page === 'student') navigate('/learning');
-    else if (page === 'home') navigate('/');
-    else if (page === 'login') navigate('/login');
-    else navigate('/register');
-  };
-  return <Register onNavigate={handleNavigate} />;
-}
-
-function ForgotPasswordWrapper() {
-  const navigate = useNavigate();
-  const handleNavigate = (page) => {
-    if (page === 'login') navigate('/login');
-    else navigate('/forgot-password');
-  };
-  return <ForgotPassword onNavigate={handleNavigate} />;
-}
-
-function App() {
+export default function App() {
   return (
     <Routes>
-      {/* ─── Landing / Home ─── */}
-      <Route path="/" element={<LandingWrapper />} />
-
-      {/* ─── Auth Routes (Chamindu) ─── */}
-      <Route path="/login" element={<LoginWrapper />} />
-      <Route path="/register" element={<RegisterWrapper />} />
-      <Route path="/forgot-password" element={<ForgotPasswordWrapper />} />
-
-      {/* ─── Auth Routes (Dammika - with layout) ─── */}
-      <Route element={<AuthLayout />}>
-        <Route path="/auth" element={<AuthPage />} />
+      {/* Public Pages */}
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<Landing />} />
+        <Route path="/courses" element={<CourseListing />} />
+        <Route path="/courses/:id" element={<CourseDetails />} />
+        <Route path="/courses/:id/contents" element={<CourseContents />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Route>
 
-      {/* ─── Dashboard Routes (Dammika - with layout) ─── */}
-      <Route element={<DashboardLayout />}>
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/courses/create" element={<CreateCoursePage />} />
+      {/* Student Protected Layout */}
+      <Route element={<ProtectedRoute allowedRoles={['student']} />}>
+        <Route element={<StudentLayout />}>
+          <Route path="/student/dashboard" element={<StudentDashboard />} />
+          <Route path="/student/my-courses" element={<MyCourses />} />
+          <Route path="/student/explore" element={<CourseListing />} />
+          <Route path="/student/courses/:id" element={<CourseDetails />} />
+          <Route path="/student/course/:courseId/learn" element={<LearnLesson />} />
+          <Route path="/student/course/:courseId/completed" element={<LearnCompleted />} />
+          <Route path="/student/payments" element={<Payments />} />
+          <Route path="/student/certificates" element={<Certificates />} />
+          <Route path="/student/profile" element={<StudentProfile />} />
+          <Route path="/student/edit-profile" element={<EditProfile />} />
+          <Route path="/student/forum" element={<Forum />} />
+          <Route path="/student/notifications" element={<Notifications />} />
+          <Route path="/student/chat" element={<ChatPage />} />
+        </Route>
       </Route>
 
-      {/* ─── Student Learning (Dinisuru) ─── */}
-      <Route path="/learning" element={<LearningWrapper />} />
-      <Route path="/learning-complete" element={<LerningCompleateWrapper />} />
-      <Route path="/forum" element={<ForumWrapper />} />
-      <Route path="/notifications" element={<NotificationsWrapper />} />
+      {/* Instructor Protected Layout */}
+      <Route element={<ProtectedRoute allowedRoles={['instructor']} />}>
+        <Route element={<InstructorLayout />}>
+          <Route path="/instructor/dashboard" element={<InstructorDashboard />} />
+          <Route path="/instructor/courses" element={<ManageCourses />} />
+          <Route path="/instructor/create-course" element={<CreateCourse />} />
+          <Route path="/instructor/upload" element={<UploadMaterial />} />
+          <Route path="/instructor/earnings" element={<Earnings />} />
+          <Route path="/instructor/reports" element={<Reports />} />
+          <Route path="/instructor/profile" element={<InstructorProfile />} />
+          <Route path="/instructor/forum" element={<Forum />} />
+          <Route path="/instructor/notifications" element={<Notifications />} />
+          <Route path="/instructor/chat" element={<ChatPage />} />
+        </Route>
+      </Route>
 
-      {/* ─── Course (Gihan) ─── */}
-      <Route path="/course-list" element={<CourseList />} />
+      {/* Admin Protected Layout */}
+      <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+        <Route element={<AdminLayout />}>
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/users" element={<UserManagement />} />
+          <Route path="/admin/courses" element={<CourseManagement />} />
+          <Route path="/admin/create-course" element={<CreateCourse />} />
+          <Route path="/admin/reports" element={<Reports />} />
+          <Route path="/admin/payments" element={<AdminPayment />} />
+          <Route path="/admin/profile" element={<AdminProfile />} />
+          <Route path="/admin/forum" element={<Forum />} />
+          <Route path="/admin/notifications" element={<Notifications />} />
+          <Route path="/admin/chat" element={<ChatPage />} />
+        </Route>
+      </Route>
 
-      {/* ─── Student Profile & Progress (Gihan) ─── */}
-      <Route path="/user-profile" element={<UserProfile />} />
-      <Route path="/edit-profile" element={<EditProfile />} />
-      <Route path="/certificates" element={<Certificate />} />
-      <Route path="/progress-tracking" element={<ProgressTracking />} />
-
-      {/* ─── Instructor (Chamindu + Gihan) ─── */}
-      <Route path="/manage-course" element={<ManageCourse />} />
-      <Route path="/upload-material" element={<UploadMaterial />} />
-      <Route path="/user-management" element={<UserManagement />} />
-
-      {/* ─── Admin (Chamindu) ─── */}
-      <Route path="/admin/payment" element={<AdminPayment />} />
-
-      {/* ─── Communication (Chamindu) ─── */}
-      <Route path="/chat" element={<ChatPage />} />
-
-      {/* ─── Catch-all redirect ─── */}
+      {/* Catch All Redirect */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
-
-export default App;

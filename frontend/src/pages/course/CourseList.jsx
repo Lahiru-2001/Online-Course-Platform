@@ -473,7 +473,7 @@ export default function CourseList() {
                             <div 
                                 key={course.id} 
                                 className="course-card" 
-                                onClick={() => navigate('/learning')}
+                                onClick={() => navigate('/course-details')}
                                 style={{ cursor: 'pointer' }}
                             >
                                 <div className="course-card-image-wrapper">

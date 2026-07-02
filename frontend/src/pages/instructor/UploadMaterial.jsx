@@ -1,184 +1,92 @@
-import { useState, useRef } from "react";
-import "./UploadMaterial.css";
-import { FiUsers, FiBookOpen, FiUploadCloud, FiCheck, FiX } from "react-icons/fi";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { UploadCloud, Check } from 'lucide-react';
+import Card from '../../components/ui/Card';
+import Button from '../../components/ui/Button';
 
 export default function UploadMaterial() {
-  const [selectedCourse, setSelectedCourse] = useState("Introduction to UI/UX Design");
-  const [materialTitle, setMaterialTitle] = useState("");
-  const [dragOver, setDragOver] = useState(false);
-  const [uploadedFile, setUploadedFile] = useState(null);
-  const fileInputRef = useRef(null);
+  const navigate = useNavigate();
+  const [course, setCourse] = useState('Introduction to UI/UX Design');
+  const [title, setTitle] = useState('');
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) setUploadedFile(file);
-  };
-
-  const handleDrop = (e) => {
+  const handleUpload = (e) => {
     e.preventDefault();
-    setDragOver(false);
-    const file = e.dataTransfer.files[0];
-    if (file) setUploadedFile(file);
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    setDragOver(true);
-  };
-
-  const handleDragLeave = () => setDragOver(false);
-
-  const handleCancel = () => {
-    setMaterialTitle("");
-    setUploadedFile(null);
-    setSelectedCourse("Introduction to UI/UX Design");
+    alert('Course lecture material uploaded successfully!');
+    navigate('/instructor/courses');
   };
 
   return (
-    <div className="um-shell">
-
-      {/* Sidebar */}
-      <aside className="um-sidebar">
-        <div className="um-brand">
-          <span className="um-brand-name">FUCHSIUS</span>
-          <span className="um-instructor-badge">Instructor</span>
-        </div>
-
-        <nav className="um-sidenav">
-          <div className="um-sitem">
-            <FiUsers size={16} />
-            <span>My Courses</span>
-          </div>
-          <div className="um-sitem um-sitem-active">
-            <FiUploadCloud size={16} />
-            <span>Upload Material</span>
-          </div>
-          <div className="um-sitem">
-            <FiUsers size={16} />
-            <span>Students</span>
-          </div>
-        </nav>
-      </aside>
-
-      {/* Main */}
-      <div className="um-main">
-
-        {/* Top header */}
-        <header className="um-topbar">
-          <h1 className="um-topbar-title">Upload Course Material</h1>
-        </header>
-
-        {/* Form card */}
-        <div className="um-content">
-          <div className="um-card">
-
-            {/* Step 1 */}
-            <div className="um-section">
-              <h2 className="um-step-title">Step 1: Course Details</h2>
-              <hr className="um-divider" />
-
-              <div className="um-field">
-                <label className="um-label">Select Course</label>
-                <select
-                  className="um-select"
-                  value={selectedCourse}
-                  onChange={(e) => setSelectedCourse(e.target.value)}
-                >
-                  <option>Introduction to UI/UX Design</option>
-                  <option>Advanced Web Systems Architecture</option>
-                  <option>Strategic Enterprise Management</option>
-                  <option>Quantum Physics for Beginners</option>
-                  <option>Interpersonal Skills (V1.0)</option>
-                </select>
-              </div>
-
-              <div className="um-field">
-                <label className="um-label">Material Title</label>
-                <input
-                  className="um-input"
-                  type="text"
-                  placeholder="e.g., Chapter 1: Wireframing Basics"
-                  value={materialTitle}
-                  onChange={(e) => setMaterialTitle(e.target.value)}
-                />
-              </div>
-            </div>
-
-            {/* Step 2 */}
-            <div className="um-section">
-              <h2 className="um-step-title">Step 2: File Upload</h2>
-
-              {/* Drop zone */}
-              <div
-                className={`um-dropzone ${dragOver ? "um-dropzone-active" : ""} ${uploadedFile ? "um-dropzone-done" : ""}`}
-                onClick={() => fileInputRef.current.click()}
-                onDrop={handleDrop}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-              >
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".pdf,.mp4,.zip,.pptx"
-                  style={{ display: "none" }}
-                  onChange={handleFileChange}
-                />
-
-                <div className="um-drop-icon">
-                  <FiUploadCloud size={28} color="#90aec4" />
-                </div>
-
-                {uploadedFile ? (
-                  <>
-                    <p className="um-drop-text um-drop-success">
-                      <FiCheck size={14} /> {uploadedFile.name}
-                    </p>
-                    <p className="um-drop-sub">
-                      {(uploadedFile.size / 1024 / 1024).toFixed(2)} MB — click to change
-                    </p>
-                  </>
-                ) : (
-                  <>
-                    <p className="um-drop-text">Click to upload or drag and drop</p>
-                    <p className="um-drop-sub">PDF, MP4, ZIP or PPTX (Max. 500MB)</p>
-                  </>
-                )}
-              </div>
-            </div>
-
-            {/* Actions */}
-            <div className="um-actions">
-              <button className="um-btn-cancel" onClick={handleCancel}>
-                Cancel
-              </button>
-              <button
-                className="um-btn-upload"
-                onClick={() => fileInputRef.current.click()}
-              >
-                <FiCheck size={15} /> Upload Material
-              </button>
-            </div>
-
-          </div>
-        </div>
-
-        {/* Footer */}
-        <footer className="um-footer">
-          <span className="um-footer-logo">LMS</span>
-          <span className="um-footer-copy">© 2024 LMS Sri Lanka. All Rights Reserved.</span>
-          <div className="um-footer-links">
-            <span>Support</span>
-            <span>Terms of Service</span>
-            <span>Privacy Policy</span>
-            <span>Contact Us</span>
-          </div>
-          <div className="um-footer-icons">
-            <span className="um-footer-icon">&#x1F517;</span>
-            <span className="um-footer-icon">&#x1F310;</span>
-          </div>
-        </footer>
-
+    <div className="max-w-3xl mx-auto flex flex-col gap-6 min-h-screen">
+      <div>
+        <h1 className="text-xl font-bold text-[#1e3a5f]">Upload Course Material</h1>
       </div>
+
+      <Card className="border border-gray-200 shadow-sm p-6 md:p-8">
+        <form onSubmit={handleUpload} className="flex flex-col gap-6">
+          
+          {/* Step 1: Course Details */}
+          <div className="flex flex-col gap-4">
+            <h3 className="font-extrabold text-gray-800 text-sm">Step 1: Course Details</h3>
+            
+            <div>
+              <label className="text-xs font-bold text-gray-700 block mb-1.5">Select Course</label>
+              <select
+                value={course}
+                onChange={(e) => setCourse(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg text-xs outline-none focus:border-orange-500"
+              >
+                <option>Introduction to UI/UX Design</option>
+                <option>Advanced React Architecture</option>
+                <option>G.C.E. A/L ICT</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="text-xs font-bold text-gray-700 block mb-1.5">Material Title</label>
+              <input
+                type="text"
+                placeholder="e.g., Chapter 1: Wireframing Basics"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg text-xs outline-none focus:border-orange-500"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Step 2: File Upload */}
+          <div className="flex flex-col gap-4 border-t border-gray-100 pt-6">
+            <h3 className="font-extrabold text-gray-800 text-sm">Step 2: File Upload</h3>
+            
+            <div className="border-2 border-dashed border-gray-250 hover:border-orange-500 bg-gray-50/50 rounded-xl p-10 flex flex-col items-center justify-center text-center cursor-pointer transition-all">
+              <div className="w-12 h-12 bg-blue-50/80 rounded-full flex items-center justify-center text-[#1e3a5f] mb-3">
+                <UploadCloud className="w-6 h-6" />
+              </div>
+              <span className="text-xs font-bold text-gray-800">Click to upload or drag and drop</span>
+              <p className="text-[10px] text-gray-400 mt-1">PDF, MP4, ZIP or PPTX (Max. 500MB)</p>
+            </div>
+          </div>
+
+          {/* Bottom buttons */}
+          <div className="flex justify-end gap-3 border-t border-gray-100 pt-6">
+            <Button 
+              type="button" 
+              onClick={() => navigate('/instructor/courses')} 
+              variant="outline" 
+              className="py-2.5 px-6 text-xs font-bold uppercase border-gray-300 text-gray-700 hover:bg-gray-50 shadow-none"
+            >
+              Cancel
+            </Button>
+            <Button 
+              type="submit" 
+              className="py-2.5 px-6 text-xs font-bold uppercase bg-orange-500 text-white hover:bg-orange-600 flex items-center gap-1.5"
+            >
+              <Check className="w-4 h-4" /> Upload Material
+            </Button>
+          </div>
+
+        </form>
+      </Card>
     </div>
   );
 }
