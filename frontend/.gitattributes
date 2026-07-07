@@ -1,0 +1,17 @@
+# Normalize line endings for all text files (Prevents Windows vs Mac conflicts)
+* text=auto eol=lf
+
+# Explicitly declare text files
+*.js text
+*.jsx text
+*.css text
+*.html text
+*.md text
+*.json text
+
+# Explicitly declare binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
