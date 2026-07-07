@@ -1,28 +1,25 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const AssignmentSchema = new mongoose.Schema(
+// The blueprint for a course assignment
+const assignmentSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, "Assignment title is required"],
-      trim: true,
+      required: [true, 'Give this assignment a name!'],
     },
     description: {
       type: String,
-      required: [true, "Assignment description is required"],
+      required: [true, 'Explain what the students need to do.'],
     },
-    fileUrl: {
-      type: String,
-      default: "",
-    },
-    dueDate: {
-      type: Date,
-      required: [true, "Due date is required"],
-    },
+    // Links back to the course it belongs to
     course: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Course",
-      required: [true, "Course reference is required"],
+      ref: 'Course',
+      required: true,
+    },
+    // When is this due? (Optional, but good to have)
+    dueDate: {
+      type: Date,
     },
   },
   {
@@ -30,4 +27,4 @@ const AssignmentSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Assignment", AssignmentSchema);
+module.exports = mongoose.model('Assignment', assignmentSchema);

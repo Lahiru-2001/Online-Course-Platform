@@ -1,43 +1,42 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const QuizSchema = new mongoose.Schema(
+// Helper schema just for questions so the main Quiz schema doesn't look too messy
+const questionSchema = new mongoose.Schema({
+  questionText: {
+    type: String,
+    required: true,
+  },
+  options: [
+    {
+      type: String, // e.g., ["A", "B", "C", "D"] or actual text
+      required: true,
+    },
+  ],
+  correctAnswer: {
+    type: String,
+    required: true, // Don't forget to tell us the answer!
+  },
+});
+
+// The main Quiz model
+const quizSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      default: "Lesson Quiz",
+      required: [true, 'Every quiz needs a good title.'],
     },
-    lesson: {
+    // The course this quiz belongs to
+    course: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Lesson",
-      required: [true, "Lesson reference is required"],
-      unique: true, // One quiz per lesson
+      ref: 'Course',
+      required: true,
     },
-    questions: [
-      {
-        questionText: {
-          type: String,
-          required: [true, "Question text is required"],
-        },
-        options: {
-          type: [String],
-          validate: {
-            validator: function (v) {
-              return v.length >= 2;
-            },
-            message: "A question must have at least 2 options",
-          },
-          required: true,
-        },
-        correctOptionIndex: {
-          type: Number,
-          required: [true, "Correct option index is required"],
-        },
-      },
-    ],
+    // Array of questions using the sub-schema above
+    questions: [questionSchema],
   },
   {
     timestamps: true,
   }
 );
 
-module.exports = mongoose.model("Quiz", QuizSchema);
+module.exports = mongoose.model('Quiz', quizSchema);
