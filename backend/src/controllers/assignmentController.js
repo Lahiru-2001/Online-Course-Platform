@@ -1,44 +1,55 @@
 const Assignment = require('../models/Assignment');
 const AssignmentSubmission = require('../models/AssignmentSubmission');
 
-// Handles student assignment submissions (file uploads, links, etc.)
+// Get all assignments for a specific course
+const getCourseAssignments = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+
+    if (!courseId) {
+      return res.status(400).json({ message: 'Course ID is required.' });
+    }
+
+    const assignments = await Assignment.find({ course: courseId }).sort({ dueDate: 1 });
+    
+    res.status(200).json(assignments);
+  } catch (error) {
+    console.error('Error fetching course assignments:', error);
+    res.status(500).json({ message: 'Failed to fetch assignments for this course.' });
+  }
+};
+
+// Handle student assignment submissions (file uploads, links, etc.)
 const submitAssignment = async (req, res) => {
   try {
     const { assignmentId } = req.params;
-    
-    // We are expecting a URL to a file (like an AWS S3 link, Google Drive link, etc.)
     const { fileUrl } = req.body;
     
-    // Auth fallback
     const userId = req.user ? req.user.id : req.body.userId;
 
     if (!userId || !fileUrl) {
-      return res.status(400).json({ message: 'Need both your user ID and the file URL to submit your work.' });
+      return res.status(400).json({ message: 'User ID and file URL are required.' });
     }
 
-    // Make sure they aren't submitting to a phantom assignment
+    // Verify the assignment exists
     const assignment = await Assignment.findById(assignmentId);
     if (!assignment) {
-      return res.status(404).json({ message: 'Could not find that assignment. Did the instructor delete it?' });
+      return res.status(404).json({ message: 'Assignment not found.' });
     }
 
-    // Check if the student has already submitted this before
-    // If they have, we'll just update it instead of making a duplicate
+    // Check for an existing submission to update it, otherwise create a new one
     let submission = await AssignmentSubmission.findOne({ assignment: assignmentId, user: userId });
 
     if (submission) {
-      // Overwrite the old submission with the new one
       submission.fileUrl = fileUrl;
-      // TODO: Maybe reset the grade if they resubmit?
-      // submission.grade = null; 
+      // Note: Consider resetting the grade or notifying the instructor upon resubmission
       await submission.save();
       
       return res.status(200).json({
-        message: 'Your assignment submission was successfully updated!',
+        message: 'Assignment submission updated successfully.',
         submission,
       });
     } else {
-      // First time submitting! Create a fresh record
       submission = new AssignmentSubmission({
         assignment: assignmentId,
         user: userId,
@@ -47,17 +58,18 @@ const submitAssignment = async (req, res) => {
       await submission.save();
       
       return res.status(201).json({
-        message: 'Assignment submitted successfully. Great job!',
+        message: 'Assignment submitted successfully.',
         submission,
       });
     }
 
   } catch (error) {
-    console.error('Error on assignment submission:', error);
-    res.status(500).json({ message: 'Failed to process the assignment submission.' });
+    console.error('Error submitting assignment:', error);
+    res.status(500).json({ message: 'An error occurred while processing the submission.' });
   }
 };
 
 module.exports = {
+  getCourseAssignments,
   submitAssignment,
 };

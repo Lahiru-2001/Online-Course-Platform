@@ -1,66 +1,62 @@
 const Enrollment = require('../models/Enrollment');
 const Course = require('../models/Course');
 
-// Function to handle student enrollment
+// Handle student course enrollment
 const enrollCourse = async (req, res) => {
   try {
     const { courseId } = req.body;
     
-    // We should be getting this from an auth middleware eventually!
-    // For now, let's just fallback to req.body so we can test it in Postman.
+    // Fallback to req.body for testing purposes until auth middleware is fully integrated
     const userId = req.user ? req.user.id : req.body.userId; 
 
-    // Can't enroll if we don't know who you are or what you want to study
     if (!courseId || !userId) {
-      return res.status(400).json({ message: 'Hold up! We need both a course ID and a user ID.' });
+      return res.status(400).json({ message: 'Course ID and User ID are required.' });
     }
 
-    // Double check if the course actually exists in our DB
+    // Verify if the course exists
     const courseExists = await Course.findById(courseId);
     if (!courseExists) {
-      return res.status(404).json({ message: 'Hmm, we couldn\'t find that course. Are you sure the ID is right?' });
+      return res.status(404).json({ message: 'Course not found.' });
     }
 
-    // Check if the student is trying to enroll again
+    // Check for existing enrollment to prevent duplicates
     const existingEnrollment = await Enrollment.findOne({ user: userId, course: courseId });
     if (existingEnrollment) {
-      return res.status(400).json({ message: 'You are already enrolled in this course! Dive into learning instead.' });
+      return res.status(400).json({ message: 'User is already enrolled in this course.' });
     }
 
-    // All good? Let's create the enrollment record
+    // Create new enrollment record
     const newEnrollment = new Enrollment({
       user: userId,
       course: courseId,
     });
 
     await newEnrollment.save();
-    // console.log(`User ${userId} just enrolled in ${courseId}`); // uncomment for debugging
 
     res.status(201).json({
-      message: 'Awesome! You are successfully enrolled.',
+      message: 'Enrollment successful.',
       enrollment: newEnrollment,
     });
     
   } catch (error) {
-    console.error('Yikes, something broke during enrollment:', error);
-    res.status(500).json({ message: 'Server is acting up. Try again later.' });
+    console.error('Error during course enrollment:', error);
+    res.status(500).json({ message: 'An error occurred during enrollment.' });
   }
 };
 
-// Fetch courses for the logged-in student
+// Retrieve all courses for the authenticated student
 const getMyCourses = async (req, res) => {
   try {
-    // Again, fallback to URL params if auth isn't setup yet
     const userId = req.user ? req.user.id : req.params.userId;
 
     if (!userId) {
-      return res.status(400).json({ message: 'We need your user ID to fetch your courses.' });
+      return res.status(400).json({ message: 'User ID is required to fetch courses.' });
     }
 
-    // Grab the enrollments and populate the course data so the frontend gets everything at once
+    // Fetch enrollments and populate the related course data
     const enrollments = await Enrollment.find({ user: userId }).populate('course');
 
-    // Massage the data a bit to make it easier for the frontend devs to use
+    // Format the response for the frontend
     const courses = enrollments.map((record) => ({
       enrollmentId: record._id,
       progress: record.progress,
@@ -70,8 +66,8 @@ const getMyCourses = async (req, res) => {
 
     res.status(200).json(courses);
   } catch (error) {
-    console.error('Failed fetching user courses:', error);
-    res.status(500).json({ message: 'Oops, failed to grab your courses.' });
+    console.error('Error fetching user courses:', error);
+    res.status(500).json({ message: 'Failed to fetch user courses.' });
   }
 };
 
