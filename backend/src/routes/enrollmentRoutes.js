@@ -7,20 +7,22 @@ const {
   updateEnrollment,
   deleteEnrollment,
 } = require('../controllers/enrollmentController');
+const authMiddleware = require('../middlewares/authMiddleware');
+const roleMiddleware = require('../middlewares/roleMiddleware');
 
-// GET /api/enrollments
-router.get('/', getEnrollments);
+// GET /api/enrollments  — Admin or Instructor
+router.get('/', authMiddleware, roleMiddleware('admin', 'instructor'), getEnrollments);
 
-// GET /api/enrollments/:id
-router.get('/:id', getEnrollmentById);
+// GET /api/enrollments/:id  — Authenticated
+router.get('/:id', authMiddleware, getEnrollmentById);
 
-// POST /api/enrollments
-router.post('/', createEnrollment);
+// POST /api/enrollments  — Student only
+router.post('/', authMiddleware, roleMiddleware('student'), createEnrollment);
 
-// PUT /api/enrollments/:id
-router.put('/:id', updateEnrollment);
+// PUT /api/enrollments/:id  — Authenticated
+router.put('/:id', authMiddleware, updateEnrollment);
 
-// DELETE /api/enrollments/:id
-router.delete('/:id', deleteEnrollment);
+// DELETE /api/enrollments/:id  — Admin only
+router.delete('/:id', authMiddleware, roleMiddleware('admin'), deleteEnrollment);
 
 module.exports = router;

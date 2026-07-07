@@ -29,6 +29,7 @@ app.use('/api/progress', require('./routes/progressRoutes'));
 app.use('/api/forum', require('./routes/forumRoutes'));
 app.use('/api/notifications', require('./routes/notificationRoutes'));
 app.use('/api/chat', require('./routes/chatRoutes'));
+app.use('/api/reports', require('./routes/reportRoutes'));
 
 // Health check
 app.get('/', (req, res) => {

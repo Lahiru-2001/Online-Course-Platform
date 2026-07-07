@@ -5,14 +5,15 @@ const {
   markAsRead,
   deleteNotification
 } = require('../controllers/notificationController');
+const authMiddleware = require('../middlewares/authMiddleware');
 
-// GET /api/notifications
-router.get('/', getNotifications);
+// GET /api/notifications - Authenticated users
+router.get('/', authMiddleware, getNotifications);
 
-// PUT /api/notifications/:id/read
-router.put('/:id/read', markAsRead);
+// PUT /api/notifications/:id/read - Authenticated users
+router.put('/:id/read', authMiddleware, markAsRead);
 
-// DELETE /api/notifications/:id
-router.delete('/:id', deleteNotification);
+// DELETE /api/notifications/:id - Authenticated users
+router.delete('/:id', authMiddleware, deleteNotification);
 
 module.exports = router;
