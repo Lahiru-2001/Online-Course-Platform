@@ -9,16 +9,21 @@ const NotificationSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      enum: ["About Courses", "Forum Activities", "System Updates"],
+      enum: {
+        values: ["About Courses", "Forum Activities", "System Updates"],
+        message: "{VALUE} is not a valid notification category",
+      },
       required: [true, "Notification category is required"],
     },
     title: {
       type: String,
       required: [true, "Notification title is required"],
+      trim: true,
     },
     body: {
       type: String,
       required: [true, "Notification body is required"],
+      trim: true,
     },
     read: {
       type: Boolean,
@@ -26,7 +31,10 @@ const NotificationSchema = new mongoose.Schema(
     },
     iconType: {
       type: String,
-      enum: ["assignment", "grade", "forum", "system"],
+      enum: {
+        values: ["assignment", "grade", "forum", "system"],
+        message: "{VALUE} is not a valid notification icon type",
+      },
       default: "system",
     },
   },
@@ -35,4 +43,9 @@ const NotificationSchema = new mongoose.Schema(
   }
 );
 
+// Indexes for fast retrieval of recipient's notifications (especially filter by unread/read)
+NotificationSchema.index({ recipient: 1, read: 1 });
+NotificationSchema.index({ createdAt: -1 });
+
 module.exports = mongoose.model("Notification", NotificationSchema);
+

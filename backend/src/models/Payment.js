@@ -15,10 +15,14 @@ const PaymentSchema = new mongoose.Schema(
     amount: {
       type: Number,
       required: [true, "Payment amount is required"],
+      min: [0, "Payment amount cannot be negative"],
     },
     status: {
       type: String,
-      enum: ["pending", "completed", "failed"],
+      enum: {
+        values: ["pending", "completed", "failed"],
+        message: "{VALUE} is not a valid payment status",
+      },
       default: "pending",
     },
     paymentDate: {
@@ -28,10 +32,12 @@ const PaymentSchema = new mongoose.Schema(
     paymentMethod: {
       type: String,
       required: [true, "Payment method is required"],
+      trim: true,
     },
     transactionId: {
       type: String,
       default: "",
+      trim: true,
     },
   },
   {
@@ -39,4 +45,9 @@ const PaymentSchema = new mongoose.Schema(
   }
 );
 
+// Indexes to speed up queries by student or course
+PaymentSchema.index({ student: 1 });
+PaymentSchema.index({ course: 1 });
+
 module.exports = mongoose.model("Payment", PaymentSchema);
+
