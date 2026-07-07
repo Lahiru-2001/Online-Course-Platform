@@ -1,38 +1,38 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const NotificationSchema = new mongoose.Schema(
+// Keeps track of alerts we need to show the user
+const notificationSchema = new mongoose.Schema(
   {
-    recipient: {
+    // Who is this notification for?
+    user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: [true, "Recipient reference is required"],
+      ref: 'User',
+      required: true,
     },
-    category: {
+    // The actual text to display
+    message: {
       type: String,
-      enum: ["About Courses", "Forum Activities", "System Updates"],
-      required: [true, "Notification category is required"],
+      required: [true, 'A notification needs a message!'],
     },
-    title: {
-      type: String,
-      required: [true, "Notification title is required"],
-    },
-    body: {
-      type: String,
-      required: [true, "Notification body is required"],
-    },
-    read: {
+    // So we know whether to highlight it or not
+    isRead: {
       type: Boolean,
       default: false,
     },
-    iconType: {
+    // Optional: categorizing notifications makes filtering easier
+    type: {
       type: String,
-      enum: ["assignment", "grade", "forum", "system"],
-      default: "system",
+      enum: ['system', 'course', 'message', 'forum'],
+      default: 'system',
     },
+    // Optional link if clicking the notification should take them somewhere
+    link: {
+      type: String,
+    }
   },
   {
-    timestamps: true,
+    timestamps: true, // We definitely need to know when this was sent
   }
 );
 
-module.exports = mongoose.model("Notification", NotificationSchema);
+module.exports = mongoose.model('Notification', notificationSchema);
