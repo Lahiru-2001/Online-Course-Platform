@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#F8F9FF] text-[#64748B] antialiased font-sans text-[14px] font-normal;
+  }
+
+  /* Typography spec applied inside <main> elements only to preserve navbar styles */
+  main h1, .typo-h1 {
+    font-size: 32px !important;
+    font-weight: 700 !important;
+    color: #1E3A5F !important;
+  }
+  
+  main h2, .typo-h2 {
+    font-size: 24px !important;
+    font-weight: 600 !important;
+    color: #1E3A5F !important;
+  }
+  
+  main h3, .typo-h3 {
+    font-size: 20px !important;
+    font-weight: 600 !important;
+    color: #1E3A5F !important;
+  }
+  
+  main h4, .typo-section {
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    color: #1E3A5F !important;
+  }
+
+  main p, .typo-body {
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    color: #64748B !important;
+  }
+
+  .typo-display {
+    font-size: 38px !important;
+    font-weight: 700 !important;
+    color: #1E3A5F !important;
+  }
+
+  .typo-small {
+    font-size: 12px !important;
+    font-weight: 400 !important;
+    color: #64748B !important;
+  }
+
+  .typo-caption {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: #94A3B8 !important;
+  }
+}
+
+/* Custom scrollbar styling for slick look */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full hover:bg-gray-400;
+}
