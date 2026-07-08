@@ -1,0 +1,108 @@
+# ==================================================
+# Dependencies
+# ==================================================
+node_modules/
+**/node_modules/
+
+# ==================================================
+# Environment Variables
+# ==================================================
+.env
+.env.*
+!.env.example
+
+# ==================================================
+# Logs
+# ==================================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ==================================================
+# Build Output
+# ==================================================
+dist/
+build/
+coverage/
+.vite/
+dist-ssr/
+
+# ==================================================
+# Cache
+# ==================================================
+.cache/
+.parcel-cache/
+.eslintcache
+.nyc_output/
+
+# ==================================================
+# Backend Uploads
+# ==================================================
+backend/src/uploads/images/*
+backend/src/uploads/videos/*
+backend/src/uploads/files/*
+
+!backend/src/uploads/images/.gitkeep
+!backend/src/uploads/videos/.gitkeep
+!backend/src/uploads/files/.gitkeep
+
+# ==================================================
+# Ignore Text Files in Frontend
+# ==================================================
+frontend/**/*.txt
+
+# If you want to ignore ONLY txt files in src:
+# frontend/src/**/*.txt
+
+# ==================================================
+# Local Configuration
+# ==================================================
+*.local
+
+# ==================================================
+# Runtime Files
+# ==================================================
+*.pid
+*.pid.lock
+*.seed
+
+# ==================================================
+# Operating System Files
+# ==================================================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==================================================
+# VS Code
+# ==================================================
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+
+# ==================================================
+# JetBrains IDE
+# ==================================================
+.idea/
+
+# ==================================================
+# Temporary Files
+# ==================================================
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# ==================================================
+# Optional Package Lock Files
+# (Keep these tracked unless you intentionally remove them)
+# ==================================================
+# package-lock.json
+# backend/package-lock.json
+# frontend/package-lock.json
