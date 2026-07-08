@@ -1,7 +1,9 @@
 import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './InstructorNavbar.css';
 
-export default function InstructorNavbar({ activeLink = 'Reports' }) {
+export default function InstructorNavbar({ activeLink = 'Dashboard', searchPlaceholder = 'Search students...' }) {
+  const navigate = useNavigate();
   return (
     <header className="instructor-navbar">
       <div className="navbar-brand-sec">
@@ -9,23 +11,23 @@ export default function InstructorNavbar({ activeLink = 'Reports' }) {
       </div>
       
       <nav className="navbar-mid-links">
-        <a href="#dashboard" className={activeLink === 'Dashboard' ? 'active' : ''}>Dashboard</a>
-        <a href="#courses" className={activeLink === 'Courses' ? 'active' : ''}>Courses</a>
-        <a href="#reports" className={activeLink === 'Reports' ? 'active' : ''}>Reports</a>
-        <a href="#users" className={activeLink === 'Users' ? 'active' : ''}>Users</a>
+        <Link to="/admin/dashboard" className={activeLink === 'Dashboard' ? 'active' : ''}>Dashboard</Link>
+        <Link to="/admin/courses" className={activeLink === 'Courses' ? 'active' : ''}>Courses</Link>
+        <Link to="/admin/reports" className={activeLink === 'Reports' ? 'active' : ''}>Reports</Link>
+        <Link to="/admin/users" className={activeLink === 'Users' ? 'active' : ''}>Users</Link>
       </nav>
 
       <div className="navbar-right-sec">
         <div className="search-students-box">
-          <input type="text" placeholder="Search students..." />
+          <input type="text" placeholder={searchPlaceholder} />
           <i className="fa-solid fa-magnifying-glass"></i>
         </div>
 
-        <button className="nav-icon-btn">
+        <button className="nav-icon-btn" onClick={() => navigate('/student/notifications')}>
           <i className="fa-regular fa-bell"></i>
         </button>
 
-        <button className="nav-icon-btn">
+        <button className="nav-icon-btn" onClick={() => navigate('/admin/settings')}>
           <i className="fa-solid fa-gear"></i>
         </button>
 

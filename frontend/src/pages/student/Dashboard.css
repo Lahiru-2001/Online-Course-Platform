@@ -1,7 +1,16 @@
 .dashboard-page{
   min-height:100vh;
-  background:#EFF4FF;
+  background:#f0f4f8;
 }
+
+.view-all-link {
+  font-size: 13px;
+  font-weight: 600;
+  color: #f97316;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.view-all-link:hover { opacity: 0.75; }
 
 .top-navbar{
   height:70px;
@@ -166,14 +175,14 @@
   margin-bottom:8px;
 }
 
-.progress-bar{
+.dash-progress-bar{
   width:100%;
   height:10px;
   background:#dfe8fb;
   border-radius:20px;
 }
 
-.progress-fill{
+.dash-progress-fill{
   height:100%;
   background:#FC772A;
   border-radius:20px;
@@ -235,28 +244,23 @@
 
 /* RESPONSIVE */
 
-@media(max-width:1200px){
-
-  .stats-grid{
-    grid-template-columns:repeat(2,1fr);
+@media (max-width: 1200px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .dashboard-row{
-    grid-template-columns:1fr;
-  }
-}
-
-@media(max-width:768px){
-
-  .dashboard-layout{
-    flex-direction:column;
-  }
-
-  .dashboard-sidebar{
-    width:100%;
-  }
-
-  .stats-grid{
-    grid-template-columns:1fr;
+  .dashboard-row {
+    grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 768px) {
+  /* dashboard-layout stays as flex row — sidebar is now off-canvas via StudentSidebar.css */
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-main {
+    padding: 16px;
+  }
+}

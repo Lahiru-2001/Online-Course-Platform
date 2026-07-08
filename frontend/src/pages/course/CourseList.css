@@ -1,0 +1,360 @@
+/* CourseList.css */
+
+/* Page wrapper to stack Navbar, content, Footer */
+.course-list-page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f3f6fa;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #1e293b;
+}
+
+.course-list-container {
+  display: flex;
+  flex: 1;
+  background-color: #f3f6fa;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+
+/* Sidebar Styles */
+.course-list-sidebar {
+  width: 280px;
+  background-color: #ffffff;
+  padding: 30px 24px;
+  border-right: 1px solid #e2e8f0;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.filter-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  margin-bottom: 4px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.filter-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s ease;
+}
+
+.filter-checkbox-label:hover {
+  color: #0f172a;
+}
+
+/* Custom Checkbox Design matching screenshot */
+.custom-checkbox {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ff7a00;
+  border-radius: 3px;
+  display: inline-block;
+  position: relative;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  background-color: #fff;
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+
+input[type="checkbox"]:checked + .custom-checkbox {
+  background-color: #ff7a00;
+}
+
+input[type="checkbox"]:checked + .custom-checkbox::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Price Slider Styles */
+.price-slider-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.price-range-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.price-slider-wrapper {
+  position: relative;
+  height: 6px;
+  background-color: #e2e8f0;
+  border-radius: 3px;
+  margin: 10px 0;
+}
+
+.price-slider-track {
+  position: absolute;
+  height: 100%;
+  background-color: #ff7a00;
+  border-radius: 3px;
+}
+
+.price-slider-thumb {
+  position: absolute;
+  top: -5px;
+  width: 16px;
+  height: 16px;
+  background-color: #ff7a00;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transform: translateX(-50%);
+}
+
+/* Main Content Area */
+.course-list-main {
+  flex-grow: 1;
+  padding: 30px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Search Bar styling */
+.search-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 16px 12px 48px;
+  border: 1px solid transparent;
+  border-radius: 50px;
+  background-color: #f1f5f9;
+  font-size: 14px;
+  color: #334155;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.search-input:focus {
+  outline: none;
+  background-color: #ffffff;
+  border-color: #ff7a00;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.08);
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  width: 18px;
+  height: 18px;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+/* Cards Grid */
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+/* Course Card styling */
+.course-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.course-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+  border-color: #cbd5e1;
+}
+
+.course-card-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  overflow: hidden;
+  background-color: #e2e8f0;
+}
+
+.course-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.course-card:hover .course-card-image {
+  transform: scale(1.05);
+}
+
+.course-card-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-grow: 1;
+}
+
+.publisher-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.publisher-logo-container {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background-color: #f1f5f9;
+}
+
+.publisher-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.publisher-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.course-card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1.4;
+  height: 40px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.course-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.course-duration {
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.course-price {
+  font-size: 14px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+/* Pagination component styling */
+.pagination-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+  margin-top: 30px;
+}
+
+.pagination-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.pagination-btn:hover {
+  background-color: #f8fafc;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+.pagination-btn.active {
+  background-color: #ff7a00;
+  color: #ffffff;
+  border-color: #ff7a00;
+}
+
+.pagination-dots {
+  color: #94a3b8;
+  font-size: 14px;
+  padding: 0 4px;
+}
