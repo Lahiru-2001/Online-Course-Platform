@@ -1,6 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
 const connectDB = require('./config/db');
 
 dotenv.config();
@@ -10,10 +13,22 @@ connectDB();
 
 const app = express();
 
-// Middleware
+// Security & Logging Middlewares
+app.use(helmet());
+app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Rate Limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100,
+  message: {
+    message: 'Too many requests, try again later'
+  }
+});
+app.use(limiter);
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
@@ -35,5 +50,16 @@ app.use('/api/reports', require('./routes/reportRoutes'));
 app.get('/', (req, res) => {
   res.json({ message: 'LMS API Server is running...' });
 });
+
+// Error Handler Middleware (if exists)
+try {
+  const errorHandler = require('./middlewares/errorHandler');
+  app.use(errorHandler);
+} catch (e) {
+  // If errorHandler module is not there yet, fallback gracefully or log it
+  app.use((err, req, res, next) => {
+    res.status(err.status || 500).json({ message: err.message || 'Internal Server Error' });
+  });
+}
 
 module.exports = app;

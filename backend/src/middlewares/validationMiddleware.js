@@ -1,182 +1,277 @@
-const validateRegister = (req, res, next) => {
-  const { name, email, password } = req.body;
+const { body, validationResult } = require("express-validator");
 
-  if (!name || !email || !password) {
-    return res.status(400).json({ message: "All fields required" });
-  }
 
-  if (password.length < 6) {
-    return res.status(400).json({ message: "Password too short" });
-  }
 
-  next();
+// CHECK VALIDATION ERRORS
+
+const validate = (req, res, next) => {
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+
+        return res.status(400).json({
+            success: false,
+            errors: errors.array()
+        });
+
+    }
+
+    next();
+
 };
 
-const validateLogin = (req, res, next) => {
-  const { email, password } = req.body;
 
-  if (!email || !password) {
-    return res.status(400).json({ message: "Email & password required" });
-  }
 
-  next();
-};
+// AUTH VALIDATION
 
-//
-// ================= COURSE =================
-//
-const validateCourse = (req, res, next) => {
-  const { title, description, category } = req.body;
 
-  if (!title || !description || !category) {
-    return res.status(400).json({
-      message: "Title, description and category are required",
-    });
-  }
+// Register
 
-  next();
-};
+const validateRegister = [
 
-//
-// ================= LESSON =================
-//
-const validateLesson = (req, res, next) => {
-  const { title, content } = req.body;
+    body("name")
+        .notEmpty()
+        .withMessage("Name is required"),
 
-  if (!title || !content) {
-    return res.status(400).json({
-      message: "Lesson title and content are required",
-    });
-  }
 
-  next();
-};
+    body("email")
+        .isEmail()
+        .withMessage("Valid email is required"),
 
-//
-// ================= QUIZ =================
-//
-const validateQuiz = (req, res, next) => {
-  const { question, options, answer } = req.body;
 
-  if (!question || !options || !answer) {
-    return res.status(400).json({
-      message: "Question, options and answer are required",
-    });
-  }
+    body("password")
+        .isLength({ min: 6 })
+        .withMessage(
+            "Password must be minimum 6 characters"
+        )
 
-  next();
-};
+];
 
-//
-// ================= ASSIGNMENT =================
-//
-const validateAssignment = (req, res, next) => {
-  const { title, deadline } = req.body;
 
-  if (!title || !deadline) {
-    return res.status(400).json({
-      message: "Title and deadline are required",
-    });
-  }
 
-  next();
-};
+// Login
 
-//
-// ================= ENROLLMENT =================
-//
-const validateEnrollment = (req, res, next) => {
-  const { courseId } = req.body;
+const validateLogin = [
 
-  if (!courseId) {
-    return res.status(400).json({
-      message: "Course ID is required",
-    });
-  }
+    body("email")
+        .isEmail()
+        .withMessage("Valid email is required"),
 
-  next();
-};
+
+    body("password")
+        .notEmpty()
+        .withMessage("Password is required")
+
+];
+
+
+
+
+ 
+// COURSE VALIDATION
+ 
+
+const validateCourse = [
+
+    body("title")
+        .notEmpty()
+        .withMessage("Course title required"),
+
+
+    body("description")
+        .notEmpty()
+        .withMessage("Course description required"),
+
+
+    body("category")
+        .notEmpty()
+        .withMessage("Course category required")
+
+];
+
+
+
+
+// LESSON VALIDATION
+
+const validateLesson = [
+
+    body("title")
+        .notEmpty()
+        .withMessage("Lesson title required"),
+
+
+    body("content")
+        .notEmpty()
+        .withMessage("Lesson content required")
+
+];
+
+
+
+
+// QUIZ VALIDATION
+
+const validateQuiz = [
+
+    body("question")
+        .notEmpty()
+        .withMessage("Question required"),
+
+
+    body("options")
+        .notEmpty()
+        .withMessage("Options required"),
+
+
+    body("answer")
+        .notEmpty()
+        .withMessage("Answer required")
+
+];
+
+
+
+
+// ASSIGNMENT VALIDATION
+
+
+const validateAssignment = [
+
+    body("title")
+        .notEmpty()
+        .withMessage("Assignment title required"),
+
+
+    body("deadline")
+        .notEmpty()
+        .withMessage("Deadline required")
+
+];
+
+
+
+
+// ENROLLMENT VALIDATION
+
+const validateEnrollment = [
+
+    body("courseId")
+        .notEmpty()
+        .withMessage("Course ID required")
+
+];
+
 
 
 
 // PAYMENT VALIDATION
-const validatePayment = (req, res, next) => {
-  const { amount, courseId } = req.body;
 
-  if (!amount || !courseId) {
-    return res.status(400).json({
-      message: "Amount and Course ID are required",
-    });
-  }
+const validatePayment = [
 
-  next();
-};
+    body("amount")
+        .notEmpty()
+        .withMessage("Payment amount required"),
+
+
+    body("courseId")
+        .notEmpty()
+        .withMessage("Course ID required")
+
+];
+
+
+
 
 // CERTIFICATE VALIDATION
-const validateCertificate = (req, res, next) => {
-  const { userId, courseId } = req.body;
 
-  if (!userId || !courseId) {
-    return res.status(400).json({
-      message: "User ID and Course ID are required",
-    });
-  }
+const validateCertificate = [
 
-  next();
-};
+    body("userId")
+        .notEmpty()
+        .withMessage("User ID required"),
+
+
+    body("courseId")
+        .notEmpty()
+        .withMessage("Course ID required")
+
+];
+
+
+
 
 // PROGRESS VALIDATION
-const validateProgress = (req, res, next) => {
-  const { courseId, progress } = req.body;
 
-  if (!courseId || progress == null) {
-    return res.status(400).json({
-      message: "Course ID and progress are required",
-    });
-  }
+const validateProgress = [
 
-  next();
-};
+    body("courseId")
+        .notEmpty()
+        .withMessage("Course ID required"),
+
+
+    body("progress")
+        .notEmpty()
+        .withMessage("Progress required")
+
+];
+
+
+
 
 // FORUM VALIDATION
-const validateForum = (req, res, next) => {
-  const { title, description } = req.body;
 
-  if (!title || !description) {
-    return res.status(400).json({
-      message: "Title and description are required",
-    });
-  }
+const validateForum = [
 
-  next();
-};
+    body("title")
+        .notEmpty()
+        .withMessage("Forum title required"),
 
-// CHAT / MESSAGE VALIDATION
-const validateMessage = (req, res, next) => {
-  const { senderId, receiverId, message } = req.body;
 
-  if (!senderId || !receiverId || !message) {
-    return res.status(400).json({
-      message: "Sender, receiver and message are required",
-    });
-  }
+    body("description")
+        .notEmpty()
+        .withMessage("Forum description required")
 
-  next();
-};
+];
+
+
+
+
+// CHAT VALIDATION
+
+const validateMessage = [
+
+    body("receiverId")
+        .notEmpty()
+        .withMessage("Receiver ID required"),
+
+
+    body("message")
+        .notEmpty()
+        .withMessage("Message required")
+
+];
+
+
 
 module.exports = {
-  validateRegister,
-  validateLogin,
-  validateCourse,
-  validateLesson,
-  validateQuiz,
-  validateAssignment,
-  validateEnrollment,
 
-  // Sprint 3
-  validatePayment,
-  validateCertificate,
-  validateProgress,
-  validateForum,
-  validateMessage,
+
+    // Common validator
+
+    validate,
+    validateRegister,
+    validateLogin,
+    validateCourse,
+    validateLesson,
+    validateQuiz,
+    validateAssignment,
+    validateEnrollment,
+    validatePayment,
+    validateCertificate,
+    validateProgress,
+    validateForum,
+    validateMessage
+
 };
