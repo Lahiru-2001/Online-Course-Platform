@@ -19,6 +19,7 @@ const CertificateSchema = new mongoose.Schema(
     certificateUrl: {
       type: String,
       required: [true, "Certificate URL/path is required"],
+      trim: true,
     },
   },
   {

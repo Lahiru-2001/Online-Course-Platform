@@ -16,6 +16,7 @@ const MessageSchema = new mongoose.Schema(
       type: String,
       required: [true, "Message content is required"],
       trim: true,
+      minlength: [1, "Message content cannot be empty"],
     },
     read: {
       type: Boolean,
@@ -27,4 +28,9 @@ const MessageSchema = new mongoose.Schema(
   }
 );
 
+// Indexes to speed up conversation fetching between two users
+MessageSchema.index({ sender: 1, receiver: 1 });
+MessageSchema.index({ receiver: 1, sender: 1 });
+
 module.exports = mongoose.model("Message", MessageSchema);
+

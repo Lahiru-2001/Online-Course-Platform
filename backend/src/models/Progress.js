@@ -14,15 +14,19 @@ const ProgressSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["On Progress", "Completed"],
+      enum: {
+        values: ["On Progress", "Completed"],
+        message: "{VALUE} is not a valid progress status",
+      },
       default: "On Progress",
     },
     timeSpent: {
       type: Number, // in minutes/seconds
       default: 0,
+      min: [0, "Time spent cannot be negative"],
     },
     notes: {
-      title: { type: String, default: "" },
+      title: { type: String, default: "", trim: true },
       takeaways: { type: [String], default: [] },
     },
   },
@@ -35,3 +39,4 @@ const ProgressSchema = new mongoose.Schema(
 ProgressSchema.index({ student: 1, lesson: 1 }, { unique: true });
 
 module.exports = mongoose.model("Progress", ProgressSchema);
+
