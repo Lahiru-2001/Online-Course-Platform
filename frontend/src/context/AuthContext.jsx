@@ -1,43 +1,107 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import socket from "../services/socket";
 
-const AuthContext = createContext(null);
+const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const [token, setToken] = useState(null);
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('lms_user');
-    if (storedUser) {
-      const parsed = JSON.parse(storedUser);
-      setUser(parsed);
-      setIsAuthenticated(true);
-    }
-  }, []);
+    const storedToken = localStorage.getItem("token");
 
-  const login = (userData) => {
-    localStorage.setItem('lms_user', JSON.stringify(userData));
-    setUser(userData);
-    setIsAuthenticated(true);
+    const storedUser = localStorage.getItem("user");
+
+    if (storedToken) {
+      setToken(storedToken);
+    }
+
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+
+    setLoading(false);
+  }, []);
+  useEffect(() => {
+    if (user && token) {
+      socket.connect();
+
+      socket.emit("join", user.id); // change to user._id if needed
+
+      return () => {
+        socket.disconnect();
+      };
+    }
+  }, [user, token]);
+  // Login
+  const login = (token, user) => {
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
+
+    setToken(token);
+    setUser(user);
+
+    // Connect Socket
+    socket.connect();
+
+    socket.emit("join", user.id);
+  };
+  // Logout
+  const logout = () => {
+    socket.disconnect();
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    setToken(null);
+    setUser(null);
   };
 
-  const logout = () => {
-    localStorage.removeItem('lms_user');
-    setUser(null);
-    setIsAuthenticated(false);
+  // Update current user
+  const updateUser = (updatedUser) => {
+    setUser(updatedUser);
+
+    localStorage.setItem(
+      "user",
+      JSON.stringify(updatedUser)
+    );
   };
 
   return (
-    <AuthContext.Provider value={{ user, role: user?.role, isAuthenticated, login, logout, setUser }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        setUser,
+        updateUser,
+
+        token,
+        loading,
+
+        login,
+        logout,
+
+        isAuthenticated: !!token,
+
+        role: user?.userType,
+        userId: user?.id,
+        fullName: user?.fullName,
+        email: user?.email,
+        status: user?.status,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
+export const useAuth = () => useContext(AuthContext);
+
+export default AuthContext;

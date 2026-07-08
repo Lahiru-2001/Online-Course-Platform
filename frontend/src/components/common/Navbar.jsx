@@ -14,7 +14,7 @@ export default function Navbar({ toggleSidebar }) {
 
   // Dashboard navbar
   if (isAuthenticated && isDashboardRoute) {
-    if (role === 'student') {
+    if (role === 'Student') {
       // Student Top Navbar: Greeting on left, search and bell on right
       return (
         <header className="bg-[#184B65] text-white h-16 px-6 flex items-center justify-between shadow-md relative z-30">
@@ -54,21 +54,21 @@ export default function Navbar({ toggleSidebar }) {
             </button>
 
             {/* Settings Icon */}
-            <button 
+            {/* <button 
               onClick={() => navigate('/student/profile')}
               className="hover:text-orange-400 transition-colors" 
               aria-label="Settings"
             >
               <Settings className="w-5 h-5 text-gray-300" />
-            </button>
+            </button> */}
 
             {/* Avatar circle */}
-            <img 
+            {/* <img 
               onClick={() => navigate('/student/profile')}
               src={user?.avatar || "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"} 
               alt="Profile" 
               className="w-8 h-8 rounded-full border border-white/20 object-cover cursor-pointer hover:border-orange-400 transition-all"
-            />
+            /> */}
           </div>
         </header>
       );
@@ -76,12 +76,12 @@ export default function Navbar({ toggleSidebar }) {
       // Instructor / Admin Top Navbar matching screenshots 7-12
       // Left: LMS Brand Logo + Horizontal tabs: Dashboard, Courses, Reports, Users
       // Right: Search bar, Bell icon, Gear/Settings, Profile avatar circle
-      const baseRoute = role === 'admin' ? '/admin' : '/instructor';
+      const baseRoute = role === 'Administrator' ? '/admin' : '/instructor';
       const navLinks = [
         { label: 'Dashboard', path: `${baseRoute}/dashboard` },
         { label: 'Courses', path: `${baseRoute}/courses` },
         { label: 'Reports', path: `${baseRoute}/reports` },
-        { label: 'Users', path: role === 'admin' ? '/admin/users' : '/instructor/courses' }
+        { label: 'Users', path: role === 'Administrator' ? '/admin/users' : '/instructor/courses' }
       ];
 
       return (
@@ -140,21 +140,21 @@ export default function Navbar({ toggleSidebar }) {
             </button>
 
             {/* Settings Icon */}
-            <button 
+            {/* <button 
               onClick={() => navigate(`${baseRoute}/profile`)}
               className="hover:text-orange-400 transition-colors" 
               aria-label="Settings"
             >
               <Settings className="w-5 h-5 text-gray-300" />
-            </button>
+            </button> */}
 
             {/* Avatar circle */}
-            <img 
+            {/* <img 
               onClick={() => navigate(`${baseRoute}/profile`)}
               src={user?.avatar || "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"} 
               alt="Profile" 
               className="w-8 h-8 rounded-full border border-white/20 object-cover cursor-pointer hover:border-orange-400 transition-all"
-            />
+            /> */}
           </div>
         </header>
       );
@@ -182,7 +182,7 @@ export default function Navbar({ toggleSidebar }) {
         {isAuthenticated ? (
           <div className="flex items-center gap-3">
             <Link 
-              to={role === 'admin' ? '/admin/dashboard' : role === 'instructor' ? '/instructor/dashboard' : '/student/dashboard'} 
+              to={role === 'Administrator' ? '/admin/dashboard' : role === 'Instructor' ? '/instructor/dashboard' : '/student/dashboard'} 
               className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow transition-colors"
             >
               Go to Dashboard

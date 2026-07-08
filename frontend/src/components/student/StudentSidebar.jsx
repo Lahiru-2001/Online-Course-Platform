@@ -1,5 +1,6 @@
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import "./StudentSidebar.css";
 
 function StudentSidebar() {
@@ -7,6 +8,37 @@ function StudentSidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
 
+  const [student, setStudent] = useState({
+    firstName: "",
+    lastName: "",
+    profileImage: "",
+  });
+
+
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const loadStudent = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:5000/api/student/profile",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setStudent(res.data.student);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    if (token) {
+      loadStudent();
+    }
+  }, [token]);
   return (
     <>
       {/* Mobile Hamburger Toggle */}
@@ -90,19 +122,24 @@ function StudentSidebar() {
           >
 
             <img
-              src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+              src={
+                student.profileImage
+                  ? `http://localhost:5000${student.profileImage}`
+                  : "http://localhost:5000/uploads/images/default-profile.png"
+              }
               alt="student"
             />
 
             <div className="student-info">
-              <h4>Kasun Perera</h4>
+              <h4>
+                {student.firstName} {student.lastName}
+              </h4>
               <span>Student</span>
             </div>
 
             <i
-              className={`fa-solid ${
-                showDropdown ? "fa-chevron-up" : "fa-chevron-down"
-              }`}
+              className={`fa-solid ${showDropdown ? "fa-chevron-up" : "fa-chevron-down"
+                }`}
             ></i>
 
           </div>

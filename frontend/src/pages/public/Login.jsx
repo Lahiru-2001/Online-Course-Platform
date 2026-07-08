@@ -1,37 +1,96 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { MOCK_USERS } from '../../utils/mockData';
 import { Eye, EyeOff } from 'lucide-react';
 import Button from '../../components/ui/Button';
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    const pass = password.trim().toLowerCase();
-    let foundUser = null;
-    if (pass === 'admin') foundUser = MOCK_USERS.find(u => u.role === 'admin');
-    else if (pass === 'instructor') foundUser = MOCK_USERS.find(u => u.role === 'instructor');
-    else if (pass === 'student') foundUser = MOCK_USERS.find(u => u.role === 'student');
-    else foundUser = MOCK_USERS.find(u => u.email === email.trim().toLowerCase());
 
-    if (foundUser) {
-      login(foundUser);
-      navigate(`/${foundUser.role}/dashboard`);
-    } else {
-      setError('Invalid credentials. Hint: enter "student", "instructor", or "admin" as the password.');
+    setError("");
+
+    // Email Validation
+    if (!email.trim()) {
+      setError("Email is required.");
+      return;
+    }
+
+    const emailRegex =
+      /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    // Password Validation
+    if (!password.trim()) {
+      setError("Password is required.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email.trim(),
+          password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || "Login failed.");
+        return;
+      }
+
+      // Save session
+      login(data.token, data.user);
+
+      // Success message
+      alert(data.message);
+
+      // Redirect based on user type
+      switch (data.user.userType) {
+        case "Administrator":
+          navigate("/admin/dashboard", { replace: true });
+          break;
+
+        case "Instructor":
+          navigate("/instructor/dashboard", { replace: true });
+          break;
+
+        case "Student":
+          navigate("/student/dashboard", { replace: true });
+          break;
+
+        default:
+          setError("Invalid user type.");
+          break;
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Unable to connect to the server.");
+    } finally {
+      setLoading(false);
     }
   };
-
   return (
     <div className="min-h-[calc(100vh-64px)] flex">
       {/* Left Panel - Branding */}
@@ -89,7 +148,16 @@ export default function Login() {
               <Link to="/forgot-password" className="text-orange-500 font-bold hover:underline">Forgot password?</Link>
             </div>
 
-            <Button type="submit" variant="primary" className="w-full py-3 text-sm font-bold">Sign In</Button>
+            <Button
+              type="submit"
+              variant="primary"
+              className="w-full py-3 text-sm font-bold"
+              disabled={loading}
+            >
+
+              {loading ? "Signing In..." : "Sign In"}
+
+            </Button>
 
             <button type="button" className="w-full py-3 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2 transition-colors">
               <img src="https://www.google.com/favicon.ico" alt="Google" className="w-4 h-4" />

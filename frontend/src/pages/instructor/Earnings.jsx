@@ -1,116 +1,440 @@
-import React, { useState } from 'react';
-import { Wallet, Banknote } from 'lucide-react';
-import Card from '../../components/ui/Card';
-import Button from '../../components/ui/Button';
-import Input from '../../components/ui/Input';
+import React, { useEffect, useState } from "react";
+import { Wallet, Banknote } from "lucide-react";
+
+import Card from "../../components/ui/Card";
+import Button from "../../components/ui/Button";
+import Input from "../../components/ui/Input";
+
+import {
+  getInstructorEarnings,
+  createWithdrawal,
+  getWithdrawalHistory,
+} from "../../services/instructorService";
 
 export default function Earnings() {
-  const [balance, setBalance] = useState(148500);
-  const [amount, setAmount] = useState('');
-  const [history, setHistory] = useState([
-    { id: 'TXN-E7761', amount: 'LKR 45,000.00', date: 'June 18, 2026', method: 'Bank Transfer (BOC)', status: 'Approved' },
-    { id: 'TXN-E1280', amount: 'LKR 38,000.00', date: 'May 10, 2026', method: 'Bank Transfer (Sampath)', status: 'Approved' }
-  ]);
 
-  const handleWithdrawalRequest = (e) => {
-    e.preventDefault();
-    const withdrawVal = parseFloat(amount.replace(/[^0-9.]/g, ''));
-    if (isNaN(withdrawVal) || withdrawVal <= 0) {
-      alert('Please enter a valid positive withdrawal amount.');
-      return;
-    }
-    if (withdrawVal > balance) {
-      alert('Insufficient funds in account balance.');
-      return;
-    }
+  const [loading, setLoading] = useState(true);
+  const [balance, setBalance] = useState(0);
+  const [totalIncome, setTotalIncome] = useState(0);
+  const [totalWithdraw, setTotalWithdraw] = useState(0);
+  const [amount, setAmount] = useState("");
+  const [history, setHistory] = useState([]);
+  const [bankName, setBankName] = useState("");
+  const [accountName, setAccountName] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
 
-    setBalance(prev => prev - withdrawVal);
-    const newTxn = {
-      id: `TXN-E${Math.floor(Math.random() * 90000 + 10000)}`,
-      amount: `LKR ${withdrawVal.toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
-      date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-      method: 'Bank Transfer (BOC)',
-      status: 'Pending Approval'
-    };
-    setHistory([newTxn, ...history]);
-    setAmount('');
-    alert('Withdrawal request submitted successfully to admin review queue!');
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    try {
+      setLoading(true);
+
+      // Get earnings
+      const earnings = await getInstructorEarnings();
+
+      setBalance(earnings.accountBalance);
+
+      setTotalIncome(earnings.totalIncome);
+
+      setTotalWithdraw(earnings.totalWithdraw);
+
+      // Get withdrawal history
+      const historyResponse =
+        await getWithdrawalHistory();
+
+      setHistory(historyResponse.history);
+
+    } catch (error) {
+      console.error(error);
+
+      alert(
+        error.response?.data?.message ||
+        "Failed to load earnings."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const handleWithdrawalRequest = async (e) => {
+    e.preventDefault();
+
+    const withdrawAmount = Number(amount);
+
+    if (withdrawAmount <= 0) {
+      alert("Please enter a valid amount.");
+      return;
+    }
+
+    if (withdrawAmount > balance) {
+      alert("Insufficient balance.");
+      return;
+    }
+
+    try {
+      await createWithdrawal({
+        amount: withdrawAmount,
+        bankName,
+        accountName,
+        accountNumber,
+      });
+
+      alert("Withdrawal request submitted successfully.");
+
+      // Clear form
+      setAmount("");
+      setBankName("");
+      setAccountName("");
+      setAccountNumber("");
+
+      // Reload latest balance/history
+      await loadData();
+
+    } catch (error) {
+      console.error(error);
+
+      alert(
+        error.response?.data?.message ||
+        "Withdrawal failed."
+      );
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-[500px]">
+        <div className="text-lg font-semibold text-gray-500">
+          Loading earnings...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6">
+
+      {/* ==========================
+          Header
+      ========================== */}
+
       <div>
-        <h1 className="text-2xl font-bold text-[#1e3a5f]">Instructor Earnings</h1>
-        <p className="text-sm text-gray-500 mt-1">Review student payments share, manage payouts and withdrawals</p>
+        <h1 className="text-2xl font-bold text-[#1e3a5f]">
+          Instructor Earnings
+        </h1>
+
+        <p className="text-sm text-gray-500 mt-1">
+          Review your earnings, request withdrawals and monitor payout history.
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        {/* Payout Form */}
-        <div className="lg:col-span-2 flex flex-col gap-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <Card className="bg-gradient-to-br from-[#1e3a5f] to-[#12253f] text-white">
-              <span className="text-xs uppercase text-orange-400 font-bold tracking-wider">Account Balance</span>
-              <div className="text-3xl font-extrabold mt-2 text-white">LKR {balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
-            </Card>
-            <Card className="bg-gradient-to-br from-orange-500 to-orange-600 text-white">
-              <span className="text-xs uppercase text-white/80 font-bold tracking-wider">Next Payout Cycle</span>
-              <div className="text-3xl font-extrabold mt-2 text-white">July 10, 2026</div>
-            </Card>
+      {/* ==========================
+          Summary Cards
+      ========================== */}
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        {/* Account Balance */}
+
+        <Card className="bg-gradient-to-br from-[#1e3a5f] to-[#12253f] text-white">
+
+          <span className="text-xs uppercase text-orange-400 font-bold tracking-wider">
+            Account Balance
+          </span>
+
+          <div className="text-3xl font-extrabold mt-3">
+            LKR{" "}
+            {Number(balance).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+            })}
           </div>
 
+          <p className="text-xs text-gray-300 mt-3">
+            Available for withdrawal
+          </p>
+
+        </Card>
+
+        {/* Total Student Payments */}
+
+        <Card>
+
+          <span className="text-xs uppercase text-gray-500 font-bold tracking-wider">
+            Total Student Payments
+          </span>
+
+          <div className="text-3xl font-bold mt-3 text-[#1e3a5f]">
+            LKR{" "}
+            {Number(totalIncome).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+            })}
+          </div>
+
+          <p className="text-xs text-gray-500 mt-3">
+            100% student payments
+          </p>
+
+        </Card>
+
+        {/* Total Withdrawn */}
+
+        <Card>
+
+          <span className="text-xs uppercase text-gray-500 font-bold tracking-wider">
+            Total Withdrawn
+          </span>
+
+          <div className="text-3xl font-bold mt-3 text-red-500">
+            LKR{" "}
+            {Number(totalWithdraw).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+            })}
+          </div>
+
+          <p className="text-xs text-gray-500 mt-3">
+            Total withdrawal requests
+          </p>
+
+        </Card>
+
+      </div>
+
+      {/* ==========================
+          Main Section
+      ========================== */}
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        {/* Left Side */}
+
+        <div className="lg:col-span-2 flex flex-col gap-6">
+
           <Card>
+
             <h3 className="font-bold text-[#1e3a5f] text-sm uppercase tracking-wider mb-6 flex items-center gap-2 border-b border-gray-100 pb-3">
-              <Wallet className="w-5 h-5 text-orange-500" /> Request Payout Withdrawal
+              <Wallet className="w-5 h-5 text-orange-500" />
+              Request Withdrawal
             </h3>
 
-            <form onSubmit={handleWithdrawalRequest} className="flex flex-col gap-4">
+            <form
+              onSubmit={handleWithdrawalRequest}
+              className="space-y-5"
+            >
+
               <Input
                 label="Withdrawal Amount (LKR)"
-                placeholder="e.g. 15,000.00"
+                type="number"
+                min="1"
+                placeholder="Enter amount"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 required
               />
 
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-gray-700 uppercase tracking-wide">Receiving Bank Account</label>
-                <select className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 outline-none">
-                  <option>Bank of Ceylon - Acc: 8901***7721</option>
-                  <option>Sampath Bank - Acc: 0192***9981</option>
-                  <option>Commercial Bank - Acc: 8021***2099</option>
-                </select>
+              <Input
+                label="Bank Name"
+                placeholder="Bank of Ceylon"
+                value={bankName}
+                onChange={(e) =>
+                  setBankName(e.target.value)
+                }
+                required
+              />
+
+              <Input
+                label="Account Holder Name"
+                placeholder="Kasun Perera"
+                value={accountName}
+                onChange={(e) =>
+                  setAccountName(e.target.value)
+                }
+                required
+              />
+
+              <Input
+                label="Account Number"
+                placeholder="1234567890"
+                value={accountNumber}
+                onChange={(e) =>
+                  setAccountNumber(e.target.value)
+                }
+                required
+              />
+
+              <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+
+                <div className="flex justify-between text-sm">
+
+                  <span className="font-semibold text-gray-600">
+                    Available Balance
+                  </span>
+
+                  <span className="font-bold text-[#1e3a5f]">
+                    LKR{" "}
+                    {Number(balance).toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                    })}
+                  </span>
+
+                </div>
+
               </div>
 
-              <Button type="submit" variant="primary" className="py-3 mt-2 font-bold uppercase tracking-wider text-xs">
-                <Banknote className="w-4 h-4" /> Request Payout
+              <Button
+                type="submit"
+                variant="primary"
+                className="w-full py-3 font-bold uppercase tracking-wider"
+              >
+                <Banknote className="w-4 h-4 mr-2" />
+                Request Withdrawal
               </Button>
-            </form>
-          </Card>
-        </div>
 
-        {/* History Log */}
-        <div>
-          <Card className="h-full flex flex-col gap-6">
-            <h3 className="font-bold text-gray-900 text-sm uppercase tracking-wider border-b border-gray-100 pb-3">Withdrawal Payout Log</h3>
-            <div className="flex flex-col gap-4 overflow-y-auto max-h-[360px] pr-1">
-              {history.map((h) => (
-                <div key={h.id} className="p-3 bg-gray-50 border border-gray-200 rounded-lg flex flex-col gap-1">
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="font-mono text-gray-400">{h.id}</span>
-                    <span className={`px-2 py-0.5 text-[9px] font-bold rounded ${
-                      h.status === 'Approved' ? 'bg-green-100 text-green-800' : 'bg-orange-100 text-orange-800'
-                    }`}>{h.status}</span>
-                  </div>
-                  <h4 className="font-bold text-[#1e3a5f] text-sm mt-1">{h.amount}</h4>
-                  <p className="text-[10px] text-gray-400 mt-0.5">{h.date} • {h.method}</p>
-                </div>
-              ))}
-            </div>
+            </form>
+
           </Card>
+
+        </div>
+        {/* ==========================
+            Withdrawal History
+        ========================== */}
+
+        <div>
+
+          <Card className="h-full">
+
+            <h3 className="font-bold text-[#1e3a5f] text-sm uppercase tracking-wider border-b border-gray-200 pb-3 mb-5">
+              Withdrawal History
+            </h3>
+
+            {
+              history.length === 0 ? (
+
+                <div className="text-center py-10 text-gray-500">
+
+                  No withdrawal history found.
+
+                </div>
+
+              ) : (
+
+                <div className="space-y-4 max-h-[520px] overflow-y-auto">
+
+                  {
+                    history.map((item) => (
+
+                      <div
+                        key={item._id}
+                        className="border rounded-xl p-4 bg-gray-50"
+                      >
+
+                        <div className="flex justify-between items-center">
+
+                          <div>
+
+                            <h4 className="font-bold text-[#1e3a5f]">
+
+                              LKR{" "}
+
+                              {Number(
+                                item.withdrawAmount
+                              ).toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                              })}
+
+                            </h4>
+
+                            <p className="text-xs text-gray-500 mt-1">
+
+                              {new Date(
+                                item.createdAt
+                              ).toLocaleDateString()}
+
+                            </p>
+
+                          </div>
+
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-bold ${item.status === "Approved"
+                              ? "bg-green-100 text-green-700"
+                              : item.status === "Rejected"
+                                ? "bg-red-100 text-red-700"
+                                : "bg-orange-100 text-orange-700"
+                              }`}
+                          >
+                            {item.status}
+                          </span>
+
+                        </div>
+
+                        <div className="mt-3 text-xs text-gray-600 space-y-1">
+
+                          <p>
+
+                            <strong>Bank</strong>
+
+                            {" : "}
+
+                            {item.bankName || "-"}
+
+                          </p>
+
+                          <p>
+
+                            <strong>Account Name</strong>
+
+                            {" : "}
+
+                            {item.accountName || "-"}
+
+                          </p>
+
+                          <p>
+
+                            <strong>Account No</strong>
+
+                            {" : "}
+
+                            {item.accountNumber || "-"}
+
+                          </p>
+
+                          <p>
+
+                            <strong>Remaining Balance</strong>
+
+                            {" : "}
+
+                            LKR{" "}
+
+                            {Number(
+                              item.remainingBalance
+                            ).toLocaleString(undefined, {
+                              minimumFractionDigits: 2,
+                            })}
+
+                          </p>
+
+                        </div>
+
+                      </div>
+
+                    ))
+                  }
+
+                </div>
+
+              )
+            }
+
+          </Card>
+
         </div>
 
       </div>
+
     </div>
+
   );
+
 }

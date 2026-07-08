@@ -1,207 +1,1125 @@
-import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Star, Award, Clock, Laptop, FileText, CheckCircle } from 'lucide-react';
-import Card from '../../components/ui/Card';
-import Button from '../../components/ui/Button';
-import { useAuth } from '../../context/AuthContext';
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  Star,
+  Award,
+  Clock,
+  Laptop,
+  FileText,
+  CheckCircle,
+  BookOpen,
+  Globe,
+  Users,
+  TrendingUp,
+} from "lucide-react";
+
+import Card from "../../components/ui/Card";
+import Button from "../../components/ui/Button";
+import { useAuth } from "../../context/AuthContext";
+
+import {
+  getCourseById,
+  getCourses,
+  enrollCourse,
+  getCourseRatings,
+  addCourseRating,
+} from "../../services/api";
+
+const API_BASE_URL = "http://localhost:5000";
 
 export default function CourseDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
-  const handleBuy = () => {
-    if (isAuthenticated) {
-      alert('Processing payment pathways... Redirecting to payment page.');
-      navigate('/student/payments');
-    } else {
-      alert('Please login or register to enroll in courses.');
-      navigate('/login', { state: { from: `/courses/${id}` } });
+  const [course, setCourse] = useState(null);
+  const [recommendedCourses, setRecommendedCourses] = useState([]);
+
+  const [reviews, setReviews] = useState([]);
+
+  const [rating, setRating] = useState(0);
+
+  const [comment, setComment] = useState("");
+
+  const [submitting, setSubmitting] = useState(false);
+
+  const [loading, setLoading] = useState(true);
+
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    loadCourse();
+  }, [id]);
+
+  const loadCourse = async () => {
+    try {
+      setLoading(true);
+
+      const response = await getCourseById(id);
+
+      setCourse(response.data.course);
+
+      // Load ratings
+      await loadRatings();
+
+      const recommended = await getCourses();
+
+      setRecommendedCourses(
+        (recommended.data.courses || [])
+          .filter((c) => c._id !== id)
+          .slice(0, 4)
+      );
+    } catch (err) {
+      console.error(err);
+      setError("Failed to load course details.");
+    } finally {
+      setLoading(false);
     }
   };
 
+  const loadRatings = async () => {
+    try {
+      const response = await getCourseRatings(id);
+
+      setReviews(response.data.reviews || []);
+
+      setCourse((prev) => ({
+        ...prev,
+        averageRating: response.data.averageRating,
+        totalRatings: response.data.totalRatings,
+        ratingBreakdown: response.data.ratingBreakdown,
+      }));
+    } catch (error) {
+      console.error("Failed to load ratings:", error);
+    }
+  };
+
+  const handleBuy = () => {
+    if (!isAuthenticated) {
+      navigate("/login", {
+        state: {
+          from: `/student/courses/${id}`,
+        },
+      });
+      return;
+    }
+
+    enrollStudent();
+  };
+
+  const enrollStudent = async () => {
+    try {
+      const response = await enrollCourse(id);
+
+      alert(response.data.message);
+
+      navigate("/student/my-courses");
+    } catch (error) {
+      console.error(error);
+
+      alert(
+        error.response?.data?.message ||
+        "Unable to enroll in this course."
+      );
+    }
+  };
+
+  const handleSubmitRating = async () => {
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
+
+    if (rating === 0) {
+      alert("Please select a rating.");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+
+      const response = await addCourseRating(id, {
+        rating,
+        comment,
+      });
+
+      setReviews(response.data.reviews);
+
+      setCourse((prev) => ({
+        ...prev,
+        averageRating: response.data.averageRating,
+        totalRatings: response.data.totalRatings,
+        ratingBreakdown: response.data.ratingBreakdown,
+      }));
+
+      setRating(0);
+      setComment("");
+
+      alert("Thank you for your review!");
+    } catch (error) {
+      console.error(error);
+
+      alert(
+        error.response?.data?.message ||
+        "Unable to submit rating."
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-slate-50">
+        <div className="text-center">
+          <div className="h-16 w-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto" />
+
+          <h2 className="mt-6 text-lg font-semibold text-slate-700">
+            Loading Course...
+          </h2>
+
+          <p className="text-sm text-gray-500">
+            Please wait a moment.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !course) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <div className="text-center">
+
+          <h2 className="text-2xl font-bold text-red-600">
+            {error || "Course Not Found"}
+          </h2>
+
+          <Button
+            className="mt-6"
+            onClick={() => navigate("/courses")}
+          >
+            Back to Courses
+          </Button>
+
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col gap-8 bg-[#F8F9FF] min-h-screen">
-      {/* Top Banner */}
-      <div className="relative rounded-2xl overflow-hidden shadow-lg aspect-[21/6] max-h-[300px] bg-slate-900 shrink-0">
-        <img 
-          src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1200" 
-          alt="Course Banner" 
-          className="absolute inset-0 w-full h-full object-cover opacity-60"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6 md:p-8">
-          <span className="text-xl md:text-3xl font-extrabold text-white leading-snug block max-w-2xl">
-            Industrial Fluid systems & Smart Factory Automation
-          </span>
-        </div>
-      </div>
+    <div className="bg-slate-50 min-h-screen pb-16">
 
-      {/* Main Grid split */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        {/* Left side content (2 columns) */}
-        <div className="lg:col-span-2 flex flex-col gap-6">
-          <div>
-            <h2 className="text-[20px] font-semibold text-[#1e3a5f] uppercase tracking-wider mb-3">About</h2>
-            <p className="text-[14px] text-[#64748B] leading-relaxed">
-              The "Industrial Fluid Systems & Smart Factory Automation" course represents a pivotal opportunity for individuals seeking to delve into the cutting-edge intersection of fluid dynamics, electrical drives, and smart automation technologies. With three comprehensive modules, participants embark on a transformative journey, exploring the intricacies of fluid and electrical drive systems, fluid circuit design, and the implementation of smart factory automation solutions.
-            </p>
-          </div>
+      <section className="relative">
 
-          {/* Performance badges */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
-            <div className="text-center md:text-left border-b md:border-b-0 md:border-r border-gray-150 pb-3 md:pb-0 md:pr-4 flex flex-col justify-center">
-              <span className="text-xs font-bold text-gray-800">Flexible schedule</span>
-              <span className="text-[10px] text-gray-400 mt-0.5">Recommended experience</span>
-            </div>
-            <div className="text-center md:text-left border-b md:border-b-0 md:border-r border-gray-150 py-3 md:py-0 md:px-4 flex flex-col justify-center">
-              <span className="text-xs font-bold text-gray-800">Intermediate level</span>
-              <span className="text-[10px] text-gray-400 mt-0.5">Recommended experience</span>
-            </div>
-            <div className="text-center md:text-left pt-3 md:pt-0 md:pl-4 flex items-center justify-center md:justify-start">
-              <span className="text-xs font-bold text-gray-800">3 Month to complete</span>
-            </div>
-          </div>
+        <div className="h-[470px] overflow-hidden">
 
-          {/* Rating */}
-          <Card className="border border-gray-200 p-6">
-            <div className="flex flex-col md:flex-row gap-6 items-center">
-              <div className="text-center shrink-0">
-                <h3 className="text-3xl font-extrabold text-[#1e3a5f]">4 out of 5</h3>
-                <div className="flex gap-0.5 justify-center mt-2 text-orange-500">
-                  {[...Array(4)].map((_, i) => <Star key={i} className="w-4 h-4 fill-orange-500 text-orange-500" />)}
-                  <Star className="w-4 h-4 text-gray-300" />
-                </div>
-                <span className="text-[10px] text-gray-400 font-bold block uppercase mt-2">Top Rating</span>
-              </div>
+          <img
+            src={
+              course.image
+                ? `${API_BASE_URL}${course.image}`
+                : "https://placehold.co/1600x700"
+            }
+            alt={course.title}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              e.target.src =
+                "https://placehold.co/1600x700";
+            }}
+          />
 
-              <div className="flex-grow w-full flex flex-col gap-2">
-                {[5, 4, 3, 2, 1].map((stars) => (
-                  <div key={stars} className="flex items-center gap-3 text-xs text-[#64748B]">
-                    <span className="w-12 text-right shrink-0 font-medium">{stars} Stars</span>
-                    <div className="flex-grow h-2 bg-gray-150 rounded-full overflow-hidden">
-                      <div className="h-full bg-orange-500 rounded-full" style={{ width: `${stars === 5 || stars === 4 ? 80 : 40}%` }}></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Card>
-
-          {/* Review Block */}
-          <div className="flex flex-col gap-3 pt-4 border-t border-gray-200 mt-2">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <img 
-                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150" 
-                  alt="Latha" 
-                  className="w-10 h-10 rounded-full object-cover border border-gray-200"
-                />
-                <div>
-                  <h4 className="text-sm font-bold text-[#1e3a5f]">Latha</h4>
-                  <div className="flex gap-0.5 mt-1 text-orange-500">
-                    {[...Array(5)].map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-orange-500 text-orange-500" />)}
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center gap-1 text-[11px] text-gray-400 font-semibold">
-                <Clock className="w-3.5 h-3.5" />
-                <span>3 Month</span>
-              </div>
-            </div>
-            <p className="text-[14px] text-[#64748B] leading-relaxed font-normal mt-1">
-              Class, launched less than a year ago by Blackboard co-founder Michael Chasen, integrates exclusively...
-            </p>
-          </div>
         </div>
 
-        {/* Right side box: Pricing & inclusions (1 column) */}
-        <div className="w-full shrink-0 flex flex-col gap-6">
-          <Card className="border border-gray-200 shadow-md p-0 overflow-hidden bg-white">
-            <img 
-              src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600" 
-              alt="Thumbnail" 
-              className="w-full h-44 object-cover" 
-            />
-            <div className="p-6 flex flex-col gap-5">
-              <div>
-                <h2 className="text-2xl font-black text-gray-900">LKR 3500.00</h2>
-                <span className="text-xs text-gray-400 line-through">LKR 5000.00</span>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#071D34]/95 via-[#102B49]/85 to-[#071D34]/50" />
+
+        <div className="absolute inset-0">
+
+          <div className="max-w-7xl mx-auto px-6 h-full flex items-center">
+
+            <div className="max-w-3xl text-white">
+
+              <span className="inline-flex items-center gap-2 bg-orange-500 px-4 py-2 rounded-full text-sm font-semibold">
+
+                <BookOpen size={16} />
+
+                {course.category}
+
+              </span>
+              <h1 className="mt-6 text-5xl font-extrabold leading-tight !text-white">
+                {course.title}
+              </h1>
+              <p className="mt-6 text-lg leading-8 text-gray-200">
+
+                {course.shortDescription}
+
+              </p>
+
+              <div className="flex flex-wrap gap-6 mt-8">
+
+                <div className="flex items-center gap-2">
+
+                  <Star
+                    className="fill-yellow-400 text-yellow-400"
+                    size={20}
+                  />
+
+                  <span className="font-semibold">
+
+                    {course.averageRating || 0}
+
+                  </span>
+
+                  <span className="text-gray-300">
+
+                    ({course.totalRatings || 0} Ratings)
+
+                  </span>
+
+                </div>
+
               </div>
 
-              <Button onClick={handleBuy} variant="primary" className="w-full py-3 text-xs uppercase font-bold tracking-wider">
-                Buy Now
-              </Button>
+              <div className="flex flex-wrap gap-4 mt-8">
 
-              <div className="flex flex-col gap-3 border-t border-gray-150 pt-4 text-xs text-[#64748B]">
-                <h3 className="font-bold text-[#1e3a5f] text-[14px]">This Course included</h3>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-orange-500 shrink-0" />
-                  <span>Money Back Guarantee</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Laptop className="w-4 h-4 text-orange-500 shrink-0" />
-                  <span>Access on all devices</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Award className="w-4 h-4 text-orange-500 shrink-0" />
-                  <span>Certification on completion</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-orange-500 shrink-0" />
-                  <span>32 Modules</span>
-                </div>
+                <Button
+                  onClick={handleBuy}
+                  className="px-8 py-3"
+                >
+                  Enroll Now
+                </Button>
               </div>
 
-              <div className="border-t border-gray-150 pt-4 flex flex-col gap-2">
-                <span className="text-[10px] text-gray-400 font-bold uppercase">Offer by university of Moratuwa</span>
-                <div className="p-3 bg-gray-50 border border-gray-150 rounded-lg flex items-center justify-center">
-                  <span className="text-xs font-bold text-gray-700">University of Moratuwa</span>
-                </div>
-              </div>
-
-              {/* Share links */}
-              <div className="border-t border-gray-150 pt-4 flex flex-col gap-2">
-                <span className="text-[10px] text-gray-400 font-bold uppercase">Share this course</span>
-                <div className="flex gap-2 justify-center">
-                  {['T', 'F', 'Y', 'I', 'T', 'W'].map((social, idx) => (
-                    <button key={idx} className="w-8 h-8 rounded-full border border-gray-200 text-xs font-bold text-gray-500 hover:bg-orange-500 hover:text-white transition-all">
-                      {social}
-                    </button>
-                  ))}
-                </div>
-              </div>
             </div>
-          </Card>
+
+          </div>
+
         </div>
 
-      </div>
+      </section>
 
-      {/* Recommended for you */}
-      <div className="mt-4">
-        <h2 className="text-base font-bold text-[#1e3a5f] uppercase tracking-wider mb-6">Recommend for you</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[
-            { title: 'AI for day today life and industry level for all', price: 'LKR 3500' },
-            { title: 'Learning motivation', price: 'LKR 2500' },
-            { title: 'Image Segmentation, Filtering, and Region Analysis', price: 'LKR 3500' },
-            { title: 'Web Development with vite code', price: 'LKR 3500' }
-          ].map((course, idx) => (
-            <Card key={idx} onClick={() => navigate(`/courses/${idx + 1}`)} className="flex flex-col h-full justify-between hover:-translate-y-1 transition-transform border border-gray-200 cursor-pointer">
-              <div>
-                <div className="w-full h-24 bg-gradient-to-br from-blue-50 to-orange-50 rounded-lg flex items-center justify-center">
-                  <Award className="w-8 h-8 text-orange-500" />
-                </div>
-                <h3 className="font-bold text-[#1e3a5f] text-xs mt-3 line-clamp-2 min-h-[32px]">{course.title}</h3>
-              </div>
-              <div className="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center text-[10px]">
-                <span className="text-gray-500">Duration: 3 Month</span>
-                <span className="font-bold text-orange-500">{course.price}</span>
-              </div>
+      <div className="max-w-7xl mx-auto px-6 mt-10 grid lg:grid-cols-3 gap-8">
+
+        {/* LEFT CONTENT */}
+
+        <div className="lg:col-span-2 space-y-8">
+
+          <div className="grid md:grid-cols-4 gap-5">
+
+            <Card className="p-6">
+
+              <Clock className="text-orange-500 mb-3" />
+
+              <h4 className="font-semibold text-slate-800">
+                Duration
+              </h4>
+
+              <p className="text-gray-500 mt-1">
+                {course.duration}
+              </p>
+
             </Card>
-          ))}
+
+            <Card className="p-6">
+
+              <Award className="text-orange-500 mb-3" />
+
+              <h4 className="font-semibold text-slate-800">
+                Certificate
+              </h4>
+
+              <p className="text-gray-500 mt-1">
+                Included
+              </p>
+
+            </Card>
+
+            <Card className="p-6">
+
+              <Laptop className="text-orange-500 mb-3" />
+
+              <h4 className="font-semibold text-slate-800">
+                Access
+              </h4>
+
+              <p className="text-gray-500 mt-1">
+                Lifetime
+              </p>
+
+            </Card>
+
+            <Card className="p-6">
+
+              <TrendingUp className="text-orange-500 mb-3" />
+
+              <h4 className="font-semibold text-slate-800">
+                Level
+              </h4>
+
+              <p className="text-gray-500 mt-1">
+                {course.difficulty}
+              </p>
+
+            </Card>
+
+          </div>
+
+          <Card className="p-8">
+
+            <h2 className="text-2xl font-bold text-slate-800 mb-5">
+              About this Course
+            </h2>
+
+            <p className="leading-8 text-gray-600">
+
+              {course.description}
+
+            </p>
+
+          </Card>
+          <Card className="p-8">
+
+            <h2 className="text-2xl font-bold text-slate-800 mb-6">
+              Course Information
+            </h2>
+
+            <div className="grid md:grid-cols-2 gap-6">
+
+              <div className="border rounded-xl p-5">
+
+                <p className="text-sm text-gray-500">
+                  Category
+                </p>
+
+                <h4 className="font-bold text-lg mt-1">
+                  {course.category}
+                </h4>
+
+              </div>
+
+              <div className="border rounded-xl p-5">
+
+                <p className="text-sm text-gray-500">
+                  Difficulty
+                </p>
+
+                <h4 className="font-bold text-lg mt-1">
+                  {course.difficulty}
+                </h4>
+
+              </div>
+
+              <div className="border rounded-xl p-5">
+
+                <p className="text-sm text-gray-500">
+                  Duration
+                </p>
+
+                <h4 className="font-bold text-lg mt-1">
+                  {course.duration}
+                </h4>
+
+              </div>
+
+              <div className="border rounded-xl p-5">
+
+                <p className="text-sm text-gray-500">
+                  Lessons
+                </p>
+
+                <h4 className="font-bold text-lg mt-1">
+                  {course.lessons?.length || 0}
+                </h4>
+
+              </div>
+
+            </div>
+
+          </Card>
+
+          <Card className="p-8">
+
+            <h2 className="text-2xl font-bold text-slate-800 mb-6">
+              This Course Includes
+            </h2>
+
+            <div className="grid md:grid-cols-2 gap-6">
+
+              <div className="flex items-center gap-4">
+
+                <div className="bg-orange-100 p-3 rounded-xl">
+
+                  <Clock
+                    className="text-orange-500"
+                    size={22}
+                  />
+
+                </div>
+
+                <div>
+
+                  <h4 className="font-semibold">
+                    Duration
+                  </h4>
+
+                  <p className="text-gray-500">
+                    {course.duration}
+                  </p>
+
+                </div>
+
+              </div>
+
+              <div className="flex items-center gap-4">
+
+                <div className="bg-orange-100 p-3 rounded-xl">
+
+                  <Laptop
+                    className="text-orange-500"
+                    size={22}
+                  />
+
+                </div>
+
+                <div>
+
+                  <h4 className="font-semibold">
+                    Lifetime Access
+                  </h4>
+
+                  <p className="text-gray-500">
+                    Learn anytime
+                  </p>
+
+                </div>
+
+              </div>
+
+              <div className="flex items-center gap-4">
+
+                <div className="bg-orange-100 p-3 rounded-xl">
+
+                  <Award
+                    className="text-orange-500"
+                    size={22}
+                  />
+
+                </div>
+
+                <div>
+
+                  <h4 className="font-semibold">
+                    Certificate
+                  </h4>
+
+                  <p className="text-gray-500">
+                    Upon completion
+                  </p>
+
+                </div>
+
+              </div>
+
+              <div className="flex items-center gap-4">
+
+                <div className="bg-orange-100 p-3 rounded-xl">
+
+                  <FileText
+                    className="text-orange-500"
+                    size={22}
+                  />
+
+                </div>
+
+                <div>
+
+                  <h4 className="font-semibold">
+                    Lessons
+                  </h4>
+
+                  <p className="text-gray-500">
+                    {course.lessons?.length || 0} Lessons
+                  </p>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </Card>
+
+          <Card className="p-8">
+
+            <h2 className="text-2xl font-bold text-slate-800 mb-8">
+              Student Ratings
+            </h2>
+
+            <div className="grid md:grid-cols-[220px,1fr] gap-10">
+
+              <div className="text-center">
+
+                <h2 className="text-6xl font-black text-slate-800">
+                  {course.averageRating || "0.0"}
+                </h2>
+
+                <div className="flex justify-center gap-1 mt-4">
+
+                  {[1, 2, 3, 4, 5].map((star) => (
+
+                    <Star
+                      key={star}
+                      size={24}
+                      className={
+                        star <= Math.round(course.averageRating || 0)
+                          ? "fill-yellow-400 text-yellow-400"
+                          : "text-gray-300"
+                      }
+                    />
+
+                  ))}
+
+                </div>
+
+                <p className="text-gray-500 mt-3">
+                  {course.totalRatings || 0} Ratings
+                </p>
+
+              </div>
+
+              <div>
+
+                {[5, 4, 3, 2, 1].map((star) => {
+
+                  const percentage =
+                    course.ratingBreakdown?.[star] || 0;
+
+                  return (
+
+                    <div
+                      key={star}
+                      className="flex items-center gap-4 mb-5"
+                    >
+
+                      <span className="w-14 text-sm">
+                        {star} Star
+                      </span>
+
+                      <div className="flex-1 bg-gray-200 rounded-full h-3 overflow-hidden">
+
+                        <div
+                          className="bg-orange-500 h-full rounded-full"
+                          style={{
+                            width: `${percentage}%`
+                          }}
+                        />
+
+                      </div>
+
+                      <span className="w-10 text-right text-sm text-gray-500">
+                        {percentage}%
+                      </span>
+
+                    </div>
+
+                  );
+
+                })}
+
+              </div>
+
+            </div>
+
+          </Card>
+
+
+          <Card className="p-8">
+
+            <h2 className="text-2xl font-bold text-slate-800 mb-6">
+              Write a Review
+            </h2>
+
+            <div className="flex items-center gap-2 mb-6">
+
+              {[1, 2, 3, 4, 5].map((star) => (
+
+                <Star
+                  key={star}
+                  size={34}
+                  onClick={() => setRating(star)}
+                  className={`cursor-pointer transition ${star <= rating
+                    ? "fill-yellow-400 text-yellow-400"
+                    : "text-gray-300 hover:text-yellow-400"
+                    }`}
+                />
+
+              ))}
+
+            </div>
+
+            <textarea
+              rows={4}
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="Share your experience with this course..."
+              className="w-full border rounded-xl p-4 focus:ring-2 focus:ring-orange-500 focus:outline-none"
+            />
+
+            <Button
+              onClick={handleSubmitRating}
+              disabled={submitting}
+              className="mt-5"
+            >
+              {submitting ? "Submitting..." : "Submit Review"}
+            </Button>
+
+          </Card>
+
+
+
+          <Card className="p-8">
+
+            <h2 className="text-2xl font-bold text-slate-800 mb-8">
+              Student Reviews
+            </h2>
+
+            {reviews.length === 0 ? (
+
+              <p className="text-gray-500">
+                No reviews yet. Be the first to review this course.
+              </p>
+
+            ) : (
+
+              <div className="space-y-6">
+
+                {reviews.map((review) => (
+
+                  <div
+                    key={review._id}
+                    className="border rounded-2xl p-6"
+                  >
+
+                    <div className="flex justify-between items-start">
+
+                      <div>
+
+                        <h4 className="font-bold text-slate-800">
+                          {review.studentName}
+                        </h4>
+
+                        <div className="flex gap-1 mt-2">
+
+                          {[1, 2, 3, 4, 5].map((star) => (
+
+                            <Star
+                              key={star}
+                              size={18}
+                              className={
+                                star <= review.rating
+                                  ? "fill-yellow-400 text-yellow-400"
+                                  : "text-gray-300"
+                              }
+                            />
+
+                          ))}
+
+                        </div>
+
+                      </div>
+
+                      <span className="text-sm text-gray-400">
+                        {new Date(review.createdAt).toLocaleDateString()}
+                      </span>
+
+                    </div>
+
+                    {review.comment && (
+
+                      <p className="mt-4 text-gray-600 leading-7">
+                        {review.comment}
+                      </p>
+
+                    )}
+
+                  </div>
+
+                ))}
+
+              </div>
+
+            )}
+
+          </Card>
+
         </div>
+
+
+        <div className="space-y-6 lg:sticky lg:top-6 self-start">
+
+          {/* PURCHASE CARD */}
+
+          <Card className="overflow-hidden border-0 shadow-2xl rounded-3xl">
+
+            <div className="relative">
+
+              <img
+                src={
+                  course.image
+                    ? `${API_BASE_URL}${course.image}`
+                    : "https://placehold.co/600x400"
+                }
+                alt={course.title}
+                className="w-full h-56 object-cover"
+                onError={(e) => {
+                  e.target.src = "https://placehold.co/600x400";
+                }}
+              />
+
+              <div className="absolute top-4 right-4 bg-white rounded-full px-4 py-2 shadow-lg">
+
+                <span className="font-bold text-orange-500">
+                  {course.category}
+                </span>
+
+              </div>
+
+            </div>
+
+            <div className="p-7">
+
+              {/* PRICE */}
+
+              {course.pricing?.isFree ? (
+
+                <div className="mb-6">
+
+                  <h2 className="text-4xl font-black text-green-600">
+                    FREE
+                  </h2>
+
+                  <p className="text-gray-500 mt-1">
+                    Start learning today
+                  </p>
+
+                </div>
+
+              ) : (
+
+                <div className="mb-6">
+
+                  <div className="flex items-end gap-3">
+
+                    <h2 className="text-4xl font-black text-slate-800">
+
+                      {course.pricing?.currency || "LKR"}{" "}
+                      {course.pricing?.discountPrice ||
+                        course.pricing?.price}
+
+                    </h2>
+
+                    {course.pricing?.discountPrice > 0 && (
+
+                      <span className="line-through text-gray-400 text-lg">
+
+                        {course.pricing?.currency || "LKR"}{" "}
+                        {course.pricing?.originalPrice}
+
+                      </span>
+
+                    )}
+
+                  </div>
+
+
+                </div>
+
+              )}
+
+              {/* ENROLL BUTTON */}
+
+              <Button
+                onClick={handleBuy}
+                className="w-full py-4 text-lg font-semibold rounded-xl"
+              >
+                Enroll Now
+              </Button>
+              {/* COURSE FEATURES */}
+
+              <div className="border-t mt-8 pt-7">
+
+                <h3 className="font-bold text-xl text-slate-800 mb-5">
+                  This Course Includes
+                </h3>
+
+                <div className="space-y-5">
+
+                  <div className="flex items-center gap-4">
+
+                    <div className="bg-orange-100 p-2 rounded-lg">
+
+                      <Clock
+                        className="text-orange-500"
+                        size={18}
+                      />
+
+                    </div>
+
+                    <div>
+
+                      <h4 className="font-medium">
+                        Duration
+                      </h4>
+
+                      <p className="text-sm text-gray-500">
+                        {course.duration}
+                      </p>
+
+                    </div>
+
+                  </div>
+
+                  <div className="flex items-center gap-4">
+
+                    <div className="bg-orange-100 p-2 rounded-lg">
+
+                      <Laptop
+                        className="text-orange-500"
+                        size={18}
+                      />
+
+                    </div>
+
+                    <div>
+
+                      <h4 className="font-medium">
+                        Lifetime Access
+                      </h4>
+
+                      <p className="text-sm text-gray-500">
+                        Learn anytime
+                      </p>
+
+                    </div>
+
+                  </div>
+
+                  <div className="flex items-center gap-4">
+
+                    <div className="bg-orange-100 p-2 rounded-lg">
+
+                      <Award
+                        className="text-orange-500"
+                        size={18}
+                      />
+
+                    </div>
+
+                    <div>
+
+                      <h4 className="font-medium">
+                        Certificate
+                      </h4>
+
+                      <p className="text-sm text-gray-500">
+                        Upon completion
+                      </p>
+
+                    </div>
+
+                  </div>
+
+                  <div className="flex items-center gap-4">
+
+                    <div className="bg-orange-100 p-2 rounded-lg">
+
+                      <FileText
+                        className="text-orange-500"
+                        size={18}
+                      />
+
+                    </div>
+
+                    <div>
+
+                      <h4 className="font-medium">
+                        Lessons
+                      </h4>
+
+                      <p className="text-sm text-gray-500">
+                        {course.lessons?.length || 0} Lessons
+                      </p>
+
+                    </div>
+
+                  </div>
+
+                  <div className="flex items-center gap-4">
+
+                    <div className="bg-orange-100 p-2 rounded-lg">
+
+                      <CheckCircle
+                        className="text-orange-500"
+                        size={18}
+                      />
+
+                    </div>
+
+                    <div>
+
+                      <h4 className="font-medium">
+                        Downloadable Resources
+                      </h4>
+
+                      <p className="text-sm text-gray-500">
+                        Course materials included
+                      </p>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </Card>
+
+
+
+          {/* OFFERED BY */}
+
+          <Card className="p-7 rounded-3xl shadow-lg border-0">
+
+            <h3 className="text-xl font-bold text-slate-800 mb-5">
+              Offered By
+            </h3>
+
+            <div className="flex items-center gap-4">
+
+              <div className="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center">
+
+                <BookOpen
+                  className="text-orange-500"
+                  size={28}
+                />
+
+              </div>
+
+              <div>
+
+                <h4 className="font-bold text-slate-800">
+
+                  {course.offeredBy}
+
+                </h4>
+
+                <p className="text-sm text-gray-500">
+                  Trusted Education Partner
+                </p>
+
+              </div>
+
+            </div>
+          </Card>
+
+        </div>
+
       </div>
-    </div>
+
+
+      <div className="max-w-7xl mx-auto px-6 mt-14">
+
+        <div className="flex justify-between items-center mb-8">
+
+          <h2 className="text-3xl font-bold text-slate-800">
+            Recommended Courses
+          </h2>
+
+          <Button
+            variant="outline"
+            onClick={() => navigate("/courses")}
+          >
+            View All
+          </Button>
+
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-7">
+
+          {recommendedCourses.map((item) => (
+
+            <Card
+              key={item._id}
+              onClick={() =>
+                navigate(`/courses/${item._id}`)
+              }
+              className="overflow-hidden rounded-3xl cursor-pointer border-0 shadow-lg hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
+            >
+
+              <img
+                src={
+                  item.image
+                    ? `${API_BASE_URL}${item.image}`
+                    : "https://placehold.co/600x400"
+                }
+                alt={item.title}
+                className="w-full h-48 object-cover"
+                onError={(e) => {
+                  e.target.src =
+                    "https://placehold.co/600x400";
+                }}
+              />
+
+              <div className="p-5">
+
+                <span className="text-xs uppercase tracking-wider text-orange-500 font-bold">
+
+                  {item.offeredBy}
+
+                </span>
+
+                <h3 className="font-bold text-slate-800 mt-3 line-clamp-2 min-h-[56px]">
+
+                  {item.title}
+
+                </h3>
+
+                <div className="flex justify-between items-center mt-5">
+
+                  <span className="text-sm text-gray-500">
+
+                    {item.duration}
+
+                  </span>
+
+                  <span className="font-bold text-orange-500">
+
+                    {item.pricing?.isFree
+                      ? "FREE"
+                      : `${item.pricing?.currency || "LKR"} ${item.pricing?.discountPrice ||
+                      item.pricing?.price
+                      }`}
+
+                  </span>
+
+                </div>
+
+              </div>
+
+            </Card>
+
+          ))}
+
+        </div>
+
+      </div>
+
+    </div >
   );
 }
+
+
+
+

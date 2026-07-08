@@ -23,19 +23,19 @@ export default function Landing() {
     }
   ];
 
-  const popularCerts = [
-    { id: 1, title: 'Industrial Fluid systems & Smart Factory Automation', org: 'University of Moratuwa', duration: '3 month', price: 'LKR 3500' },
-    { id: 2, title: 'Industrial Fluid systems & Smart Factory Automation', org: 'Google', duration: '6 month', price: 'LKR 2500' },
-    { id: 3, title: 'Google IT Automation with Python', org: 'University of Michigan', duration: '1 year', price: 'LKR 1500' },
-    { id: 4, title: 'Industrial Fluid systems & Smart Factory Automation', org: 'Google', duration: '3 month', price: 'LKR 3000' }
-  ];
+  // const popularCerts = [
+  //   { id: 1, title: 'Industrial Fluid systems & Smart Factory Automation', org: 'University of Moratuwa', duration: '3 month', price: 'LKR 3500' },
+  //   { id: 2, title: 'Industrial Fluid systems & Smart Factory Automation', org: 'Google', duration: '6 month', price: 'LKR 2500' },
+  //   { id: 3, title: 'Google IT Automation with Python', org: 'University of Michigan', duration: '1 year', price: 'LKR 1500' },
+  //   { id: 4, title: 'Industrial Fluid systems & Smart Factory Automation', org: 'Google', duration: '3 month', price: 'LKR 3000' }
+  // ];
 
-  const recentlyViewed = [
-    { id: 5, title: 'AI for day today life and industry level for all', org: 'University of Moratuwa', duration: '3 month', price: 'LKR 3500', img: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=400' },
-    { id: 6, title: 'Learning motivation', org: 'Company', duration: '2 month', price: 'LKR 2500', img: 'https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?w=400' },
-    { id: 7, title: 'Image Segmentation, Filtering, and Region Analysis', org: 'University', duration: '3 hours', price: 'LKR 3500', img: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=400' },
-    { id: 8, title: 'Web Development with vite code', org: 'Open-AI', duration: '3 Weeks', price: 'LKR 3500', img: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400' }
-  ];
+  // const recentlyViewed = [
+  //   { id: 5, title: 'AI for day today life and industry level for all', org: 'University of Moratuwa', duration: '3 month', price: 'LKR 3500', img: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=400' },
+  //   { id: 6, title: 'Learning motivation', org: 'Company', duration: '2 month', price: 'LKR 2500', img: 'https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?w=400' },
+  //   { id: 7, title: 'Image Segmentation, Filtering, and Region Analysis', org: 'University', duration: '3 hours', price: 'LKR 3500', img: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=400' },
+  //   { id: 8, title: 'Web Development with vite code', org: 'Open-AI', duration: '3 Weeks', price: 'LKR 3500', img: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400' }
+  // ];
 
   const universities = [
     { name: 'Google', img: 'https://www.google.com/favicon.ico' },
@@ -46,20 +46,40 @@ export default function Landing() {
   ];
 
   const testimonials = [
-    { name: 'K.Kamal', text: '"I now feel more prepared to take on leadership roles and have already started mentoring some of my colleagues."' },
-    { name: 'Saman S. kumar', text: '"I now feel more prepared to take on leadership roles and have already started mentoring some of my colleagues."' },
-    { name: 'N. Nimal', text: '"I now feel more prepared to take on leadership roles and have already started mentoring some of my colleagues."' },
-    { name: 'K.Susana', text: '"I now feel more prepared to take on leadership roles and have already started mentoring some of my colleagues."' }
+    {
+      name: "Kasun Perera",
+      role: "Software Engineer",
+      image: "https://i.pravatar.cc/150?img=20",
+      text: "This LMS completely changed the way I learn. The courses are practical and easy to follow."
+    },
+    {
+      name: "Nimal Silva",
+      role: "Student",
+      image: "https://i.pravatar.cc/150?img=21",
+      text: "The instructors explain concepts clearly. I received my certificate and found a better job."
+    },
+    {
+      name: "Amanda Fernando",
+      role: "UI/UX Designer",
+      image: "https://i.pravatar.cc/150?img=22",
+      text: "Beautiful platform, excellent instructors, and flexible learning schedule."
+    },
+    {
+      name: "Kamal Wijesinghe",
+      role: "Developer",
+      image: "https://i.pravatar.cc/150?img=23",
+      text: "Highly recommended for anyone looking to improve technical skills."
+    }
   ];
 
   return (
     <div className="flex flex-col gap-10 bg-gray-50/50 pb-12">
       {/* Hero Carousel */}
       <div className="relative rounded-2xl overflow-hidden shadow-lg aspect-[21/9] max-h-[380px] bg-slate-900 flex items-center justify-center text-white">
-        <img 
-          src={carouselSlides[carouselIndex].image} 
-          alt="Banner" 
-          className="absolute inset-0 w-full h-full object-cover opacity-40" 
+        <img
+          src={carouselSlides[carouselIndex].image}
+          alt="Banner"
+          className="absolute inset-0 w-full h-full object-cover opacity-40"
         />
         <div className="relative z-10 text-center px-6 max-w-2xl flex flex-col items-center">
           <span className="bg-orange-500 text-white text-[10px] font-black tracking-widest uppercase px-3 py-1 rounded-full mb-3 shadow">
@@ -75,23 +95,22 @@ export default function Landing() {
             Explore Courses <ArrowRight className="w-4 h-4" />
           </Button>
         </div>
-        
+
         {/* Indicators */}
         <div className="absolute bottom-4 flex gap-2">
           {carouselSlides.map((_, idx) => (
-            <button 
+            <button
               key={idx}
               onClick={() => setCarouselIndex(idx)}
-              className={`w-2.5 h-2.5 rounded-full transition-all ${
-                carouselIndex === idx ? 'bg-orange-500 w-6' : 'bg-white/40'
-              }`}
+              className={`w-2.5 h-2.5 rounded-full transition-all ${carouselIndex === idx ? 'bg-orange-500 w-6' : 'bg-white/40'
+                }`}
             />
           ))}
         </div>
       </div>
 
       {/* Most Popular Certificates */}
-      <div>
+      {/* <div>
         <h2 className="text-base font-bold text-[#1e3a5f] uppercase tracking-wider mb-6">Most Popular Certificates</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {popularCerts.map((course) => (
@@ -115,10 +134,10 @@ export default function Landing() {
             Show more
           </Button>
         </div>
-      </div>
+      </div> */}
 
       {/* Recently Viewed Products */}
-      <div>
+      {/* <div>
         <h2 className="text-base font-bold text-[#1e3a5f] uppercase tracking-wider mb-6">Recently Viewed Products</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {recentlyViewed.map((course) => (
@@ -142,7 +161,49 @@ export default function Landing() {
             Show more
           </Button>
         </div>
+      </div> */}
+
+      {/* About Us */}
+      <div className="bg-white rounded-2xl border border-gray-200 p-8">
+        <div className="grid md:grid-cols-2 gap-10 items-center">
+
+          <div>
+            <h2 className="text-3xl font-bold text-[#1e3a5f] mb-5">
+              About Our Learning Platform
+            </h2>
+
+            <p className="text-gray-600 leading-8">
+              Our Online Learning Management System connects students,
+              universities, and industry professionals through
+              high-quality online courses.
+            </p>
+
+            <p className="text-gray-600 leading-8 mt-4">
+              Learn from expert instructors, earn recognized
+              certificates, improve your career, and study at your own
+              pace anytime and anywhere.
+            </p>
+
+            <Button
+              className="mt-6"
+              onClick={() => navigate("/courses")}
+            >
+              Browse Courses
+            </Button>
+          </div>
+
+          <div>
+            <img
+              src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900"
+              alt="About LMS"
+              className="rounded-xl shadow-lg w-full h-[320px] object-cover"
+            />
+          </div>
+
+        </div>
       </div>
+
+
 
       {/* University Logos */}
       <div className="bg-white rounded-2xl border border-gray-200/80 p-6 flex flex-col items-center gap-4 text-center">
@@ -158,19 +219,53 @@ export default function Landing() {
       </div>
 
       {/* Testimonials */}
-      <div>
-        <h2 className="text-base font-bold text-[#1e3a5f] uppercase tracking-wider mb-6 text-center">Why people choose us</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {testimonials.map((t, idx) => (
-            <Card key={idx} className="border border-gray-200/80 p-5 flex flex-col gap-3 relative">
-              <div className="flex items-center gap-2">
-                <img src={`https://i.pravatar.cc/32?img=${idx+20}`} alt="avatar" className="w-8 h-8 rounded-full object-cover" />
-                <span className="font-bold text-xs text-gray-800">{t.name}</span>
-              </div>
-              <p className="text-xs text-gray-500 italic leading-relaxed">{t.text}</p>
-            </Card>
-          ))}
-        </div>
+        <div>
+          <h2 className="text-3xl font-bold text-[#1e3a5f] text-center mb-8">
+            What Our Students Say
+          </h2>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+            {testimonials.map((t, idx) => (
+
+              <Card
+                key={idx}
+                className="p-6 text-center hover:-translate-y-1 transition-all"
+              >
+
+                <img
+                  src={t.image}
+                  alt={t.name}
+                  className="w-20 h-20 rounded-full mx-auto object-cover"
+                />
+
+                <h3 className="mt-4 font-bold">
+                  {t.name}
+                </h3>
+
+                <p className="text-orange-500 text-sm">
+                  {t.role}
+                </p>
+
+                <div className="flex justify-center mt-3">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star
+                      key={star}
+                      className="w-4 h-4 fill-orange-500 text-orange-500"
+                    />
+                  ))}
+                </div>
+
+                <p className="mt-4 text-sm text-gray-600 italic leading-7">
+                  "{t.text}"
+                </p>
+
+              </Card>
+
+            ))}
+
+          </div>
+       
       </div>
     </div>
   );

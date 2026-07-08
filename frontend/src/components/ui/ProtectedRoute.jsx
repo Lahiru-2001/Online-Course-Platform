@@ -1,19 +1,73 @@
-import React from 'react';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import React from "react";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 export default function ProtectedRoute({ allowedRoles }) {
-  const { isAuthenticated, role } = useAuth();
-  const location = useLocation();
 
-  if (!isAuthenticated) {
-    return <Navigate to="/" replace />;
-  }
+    const {
+        loading,
+        isAuthenticated,
+        role,
+    } = useAuth();
 
-  if (allowedRoles && !allowedRoles.includes(role)) {
-    // Role mismatch -> redirect to safe default
-    return <Navigate to="/student/dashboard" replace />;
-  }
+    const location = useLocation();
 
-  return <Outlet />;
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (!isAuthenticated) {
+        return (
+            <Navigate
+                to="/login"
+                replace
+                state={{ from: location }}
+            />
+        );
+    }
+
+    if (
+        allowedRoles &&
+        !allowedRoles.includes(role)
+    ) {
+
+        switch (role) {
+
+            case "Administrator":
+                return (
+                    <Navigate
+                        to="/admin/dashboard"
+                        replace
+                    />
+                );
+
+            case "Instructor":
+                return (
+                    <Navigate
+                        to="/instructor/dashboard"
+                        replace
+                    />
+                );
+
+            case "Student":
+                return (
+                    <Navigate
+                        to="/student/dashboard"
+                        replace
+                    />
+                );
+
+            default:
+                return (
+                    <Navigate
+                        to="/login"
+                        replace
+                    />
+                );
+        }
+
+    }
+
+    return <Outlet />;
+
 }

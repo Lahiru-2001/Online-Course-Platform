@@ -1,195 +1,708 @@
-import React, { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
-import Card from '../../components/ui/Card';
-import Button from '../../components/ui/Button';
-import Input from '../../components/ui/Input';
-import Badge from '../../components/ui/Badge';
+import React, { useEffect, useState } from "react";
+
+import { useAuth } from "../../context/AuthContext";
+
+import Card from "../../components/ui/Card";
+import Button from "../../components/ui/Button";
+import Input from "../../components/ui/Input";
+import Badge from "../../components/ui/Badge";
+
+import {
+    getInstructorProfile,
+    updateInstructorProfile,
+} from "../../services/instructorService";
 
 export default function InstructorProfile() {
-  const { user, setUser } = useAuth();
-  const [isEditing, setIsEditing] = useState(false);
-  const [activeTab, setActiveTab] = useState('About Portfolio');
 
-  const [formData, setFormData] = useState({
-    firstName: user?.name?.split(' ')[0] || 'Saman',
-    lastName: user?.name?.split(' ')[1] || 'Perera',
-    email: user?.email || 'saman@uni.lk',
-    phone: '+94 71 889 1290',
-    specialization: 'Full-Stack Development & Python Automation',
-    bio: 'Senior academic researcher and software consultant with 10+ years teaching web platforms and deployment workflows.',
-    expertise: ['React', 'Python', 'UI/UX Dynamics', 'Mechatronics'],
-    avatar: user?.avatar || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150'
-  });
+    const { setUser } = useAuth();
 
-  const handleUpdate = (e) => {
-    e.preventDefault();
-    setUser((prev) => ({
-      ...prev,
-      name: `${formData.firstName} ${formData.lastName}`,
-      email: formData.email,
-      avatar: formData.avatar
-    }));
-    setIsEditing(false);
-    alert('Instructor profile portfolio updated successfully!');
-  };
+    const [loading, setLoading] = useState(true);
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setFormData((prev) => ({ ...prev, avatar: url }));
+    const [saving, setSaving] = useState(false);
+
+    const [isEditing, setIsEditing] = useState(false);
+
+    const [activeTab, setActiveTab] =
+        useState("About Portfolio");
+
+    const [error, setError] = useState("");
+
+    const [success, setSuccess] = useState("");
+
+    const [imageFile, setImageFile] =
+        useState(null);
+
+    const [formData, setFormData] = useState({
+
+        firstName: "",
+
+        lastName: "",
+
+        email: "",
+
+        title: "",
+
+        specialization: "",
+
+        bio: "",
+
+        avatar: "/uploads/images/default-profile.png",
+
+        expertise: [
+            "React",
+            "Node.js",
+            "JavaScript",
+            "MongoDB",
+        ],
+
+    });
+
+
+    useEffect(() => {
+
+        loadProfile();
+
+    }, []);
+
+    const loadProfile = async () => {
+
+        try {
+
+            setLoading(true);
+
+            const response =
+                await getInstructorProfile();
+
+            const profile =
+                response.instructor;
+
+            setFormData({
+
+                firstName:
+                    profile.firstName || "",
+
+                lastName:
+                    profile.lastName || "",
+
+                email:
+                    profile.email || "",
+
+                title:
+                    profile.title || "",
+
+                specialization:
+                    profile.specialization || "",
+
+                bio:
+                    profile.bio || "",
+
+                avatar:
+                    profile.profileImage
+                        ? `http://localhost:5000${profile.profileImage}`
+                        : "/uploads/images/default-profile.png",
+
+                expertise: [
+                    "React",
+                    "Node.js",
+                    "JavaScript",
+                    "MongoDB",
+                ],
+
+            });
+
+        } catch (error) {
+
+            console.log(error);
+
+            setError(
+                error.response?.data?.message ||
+                "Failed to load profile."
+            );
+
+        } finally {
+
+            setLoading(false);
+
+        }
+
+    };
+
+    const handleChange = (e) => {
+
+        setFormData({
+
+            ...formData,
+
+            [e.target.name]:
+                e.target.value,
+
+        });
+
+    };
+
+    const handleImageUpload = (e) => {
+
+        const file = e.target.files[0];
+
+        if (!file) return;
+
+        setImageFile(file);
+
+        setFormData((prev) => ({
+
+            ...prev,
+
+            avatar:
+                URL.createObjectURL(file),
+
+        }));
+
+    };
+
+    const validateForm = () => {
+
+        if (!formData.firstName.trim()) {
+
+            setError(
+                "First Name is required."
+            );
+
+            return false;
+
+        }
+
+        if (!formData.lastName.trim()) {
+
+            setError(
+                "Last Name is required."
+            );
+
+            return false;
+
+        }
+
+        if (!formData.email.trim()) {
+
+            setError(
+                "Email Address is required."
+            );
+
+            return false;
+
+        }
+
+        const emailRegex =
+            /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+        if (!emailRegex.test(formData.email)) {
+
+            setError(
+                "Invalid email address."
+            );
+
+            return false;
+
+        }
+
+        if (!formData.title.trim()) {
+
+            setError(
+                "Title is required."
+            );
+
+            return false;
+
+        }
+
+        if (!formData.specialization.trim()) {
+
+            setError(
+                "Specialization is required."
+            );
+
+            return false;
+
+        }
+
+        if (!formData.bio.trim()) {
+
+            setError(
+                "Professional Bio is required."
+            );
+
+            return false;
+
+        }
+
+        setError("");
+
+        return true;
+
+    };
+
+
+
+    const handleUpdate = async (e) => {
+
+        e.preventDefault();
+
+        setSuccess("");
+
+        if (!validateForm()) return;
+
+        try {
+
+            setSaving(true);
+
+            const data =
+                new FormData();
+
+            data.append(
+                "firstName",
+                formData.firstName
+            );
+
+            data.append(
+                "lastName",
+                formData.lastName
+            );
+
+            data.append(
+                "email",
+                formData.email
+            );
+
+            data.append(
+                "title",
+                formData.title
+            );
+
+            data.append(
+                "specialization",
+                formData.specialization
+            );
+
+            data.append(
+                "bio",
+                formData.bio
+            );
+
+            if (imageFile) {
+
+                data.append(
+                    "profileImage",
+                    imageFile
+                );
+
+            }
+
+            const response =
+                await updateInstructorProfile(
+                    data
+                );
+
+            const profile =
+                response.instructor;
+
+            setUser((prev) => ({
+
+                ...prev,
+
+                name:
+                    profile.fullName,
+
+                email:
+                    profile.email,
+
+            }));
+
+            setSuccess(
+                response.message
+            );
+
+            setIsEditing(false);
+
+            await loadProfile();
+
+        } catch (error) {
+
+            console.log(error);
+
+            setError(
+
+                error.response?.data?.message ||
+
+                "Profile update failed."
+
+            );
+
+        } finally {
+
+            setSaving(false);
+
+        }
+
+    };
+
+    if (loading) {
+
+        return (
+
+            <div className="flex justify-center items-center h-80">
+
+                <div className="text-lg font-semibold">
+
+                    Loading Profile...
+
+                </div>
+
+            </div>
+
+        );
+
     }
-  };
+    return (
+        <div className="max-w-4xl mx-auto flex flex-col gap-6">
 
-  return (
-    <div className="max-w-4xl mx-auto flex flex-col gap-6">
-      {/* Top Header Card */}
-      <Card className="flex flex-col sm:flex-row items-center justify-between gap-6">
-        <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
-          <img src={formData.avatar} alt="Avatar" className="w-24 h-24 rounded-full border-4 border-green-500/10 object-cover" />
-          <div>
-            <div className="flex flex-col sm:flex-row items-center gap-2">
-              <h2 className="text-2xl font-bold text-[#1e3a5f]">{formData.firstName} {formData.lastName}</h2>
-              <Badge variant="green">Instructor</Badge>
-            </div>
-            <p className="text-sm font-semibold text-orange-500 mt-1">{formData.specialization}</p>
-            <p className="text-xs text-gray-400">{formData.email}</p>
-          </div>
-        </div>
-        <Button onClick={() => setIsEditing(!isEditing)} variant="primary" className="py-2.5 px-5">
-          {isEditing ? 'Cancel Edit' : 'Edit Profile'}
-        </Button>
-      </Card>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="text-center">
-          <span className="text-xs text-gray-400 font-bold uppercase tracking-wider">Total Students</span>
-          <h2 className="text-3xl font-extrabold text-[#1e3a5f] mt-1">1,248</h2>
-        </Card>
-        <Card className="text-center">
-          <span className="text-xs text-gray-400 font-bold uppercase tracking-wider">Courses Created</span>
-          <h2 className="text-3xl font-extrabold text-[#1e3a5f] mt-1">8</h2>
-        </Card>
-        <Card className="text-center">
-          <span className="text-xs text-gray-400 font-bold uppercase tracking-wider">Avg Rating</span>
-          <h2 className="text-3xl font-extrabold text-[#1e3a5f] mt-1">4.8 ★</h2>
-        </Card>
-      </div>
-
-      {/* Tab Select */}
-      <div className="border-b border-gray-200 flex gap-6 text-sm">
-        {['About Portfolio', 'Expertise Tags', 'Reviews'].map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`pb-3 font-semibold transition-colors ${
-              activeTab === tab ? 'border-b-2 border-orange-500 text-orange-500' : 'text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
-
-      {/* Tab Content / Edit Form */}
-      {isEditing ? (
-        <Card>
-          <form onSubmit={handleUpdate} className="flex flex-col gap-5">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input
-                label="First Name"
-                value={formData.firstName}
-                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                required
-              />
-              <Input
-                label="Last Name"
-                value={formData.lastName}
-                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                required
-              />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input
-                label="Email Address"
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                required
-              />
-              <Input
-                label="Specialization / Title"
-                value={formData.specialization}
-                onChange={(e) => setFormData({ ...formData, specialization: e.target.value })}
-                required
-              />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-gray-700 uppercase tracking-wide">Professional Bio</label>
-              <textarea
-                value={formData.bio}
-                onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                className="w-full h-24 p-3 border border-gray-300 rounded-lg text-sm bg-gray-50 focus:bg-white outline-none"
-              />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-gray-700 uppercase tracking-wide">Upload new picture</label>
-              <input type="file" accept="image/*" onChange={handleImageUpload} className="text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100" />
-            </div>
-
-            <Button type="submit" variant="primary" className="py-3 mt-2">
-              Update Profile
-            </Button>
-          </form>
-        </Card>
-      ) : (
-        <Card>
-          {activeTab === 'About Portfolio' && (
-            <div className="flex flex-col gap-4">
-              <h3 className="font-bold text-[#1e3a5f] text-base">Professional Bio</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">{formData.bio}</p>
-              <div className="grid grid-cols-2 gap-4 border-t border-gray-100 pt-4 mt-2 text-sm">
-                <div>
-                  <span className="text-xs text-gray-400 font-semibold block uppercase">Phone Contact</span>
-                  <span className="font-medium text-gray-800">{formData.phone}</span>
+            {error && (
+                <div className="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded-lg">
+                    {error}
                 </div>
-                <div>
-                  <span className="text-xs text-gray-400 font-semibold block uppercase">Accredited Specialization</span>
-                  <span className="font-medium text-gray-800">Lecturer / Senior Advisor</span>
-                </div>
-              </div>
-            </div>
-          )}
+            )}
 
-          {activeTab === 'Expertise Tags' && (
-            <div>
-              <h3 className="font-bold text-[#1e3a5f] text-sm uppercase tracking-wider mb-4">Domain Skills Portfolio</h3>
-              <div className="flex flex-wrap gap-2.5">
-                {formData.expertise.map((tag) => (
-                  <span key={tag} className="px-3.5 py-2 bg-green-50 text-green-800 text-xs font-bold rounded-lg border border-green-200 shadow-sm">{tag}</span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'Reviews' && (
-            <div className="flex flex-col gap-4">
-              <div className="p-4 border border-gray-200 rounded-xl bg-gray-50/50 flex flex-col gap-2">
-                <div className="flex justify-between items-center text-xs font-bold">
-                  <span className="text-gray-800">Kasun P. (Student u4)</span>
-                  <span className="text-orange-500">★★★★★ 5.0</span>
+            {success && (
+                <div className="bg-green-100 border border-green-300 text-green-700 px-4 py-3 rounded-lg">
+                    {success}
                 </div>
-                <p className="text-xs text-gray-500 leading-relaxed">
-                  Excellent mechatronics syllabus. Lectures cover clean setup details and direct deployment cycles.
+            )}
+
+            {/* Header */}
+
+            <Card className="flex flex-col sm:flex-row items-center justify-between gap-6">
+
+                <div className="flex flex-col sm:flex-row items-center gap-4">
+
+                    <img
+                        src={formData.avatar}
+                        alt="Profile"
+                        className="w-24 h-24 rounded-full border-4 border-green-100 object-cover"
+                    />
+
+                    <div>
+
+                        <div className="flex items-center gap-2">
+
+                            <h2 className="text-2xl font-bold text-[#1e3a5f]">
+
+                                {formData.firstName} {formData.lastName}
+
+                            </h2>
+
+                            <Badge variant="green">
+                                Instructor
+                            </Badge>
+
+                        </div>
+
+                        <p className="text-orange-500 font-semibold mt-1">
+
+                            {formData.title}
+
+                        </p>
+
+                        <p className="text-gray-500 text-sm">
+
+                            {formData.specialization}
+
+                        </p>
+
+                        <p className="text-gray-400 text-xs mt-1">
+
+                            {formData.email}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <Button
+                    variant="primary"
+                    onClick={() =>
+                        setIsEditing(!isEditing)
+                    }
+                >
+
+                    {isEditing
+                        ? "Cancel"
+                        : "Edit Profile"}
+
+                </Button>
+
+            </Card>
+
+            {/* Dummy Stats */}
+
+            {/* <div className="grid md:grid-cols-3 gap-5">
+
+            <Card className="text-center">
+
+                <p className="text-gray-500 text-sm">
+
+                    Total Students
+
                 </p>
-              </div>
+
+                <h2 className="text-3xl font-bold mt-2">
+
+                    1248
+
+                </h2>
+
+            </Card>
+
+            <Card className="text-center">
+
+                <p className="text-gray-500 text-sm">
+
+                    Courses Created
+
+                </p>
+
+                <h2 className="text-3xl font-bold mt-2">
+
+                    8
+
+                </h2>
+
+            </Card>
+
+            <Card className="text-center">
+
+                <p className="text-gray-500 text-sm">
+
+                    Average Rating
+
+                </p>
+
+                <h2 className="text-3xl font-bold mt-2">
+
+                    4.8 ★
+
+                </h2>
+
+            </Card>
+
+        </div> */}
+
+            {/* Tabs */}
+
+            <div className="border-b flex gap-6">
+
+                {[
+                    "About Portfolio",
+                    // "Expertise Tags",
+                    // "Reviews",
+                ].map((tab) => (
+
+                    <button
+
+                        key={tab}
+
+                        onClick={() =>
+                            setActiveTab(tab)
+                        }
+
+                        className={`pb-3 font-semibold ${activeTab === tab
+                            ? "border-b-2 border-orange-500 text-orange-500"
+                            : "text-gray-500"
+                            }`}
+
+                    >
+
+                        {tab}
+
+                    </button>
+
+                ))}
+
             </div>
-          )}
-        </Card>
-      )}
-    </div>
-  );
+
+            {isEditing ? (
+
+                <Card>
+
+                    <form
+                        onSubmit={handleUpdate}
+                        className="space-y-5"
+                    >
+
+                        <div className="grid md:grid-cols-2 gap-4">
+
+                            <Input
+                                label="First Name"
+                                name="firstName"
+                                value={formData.firstName}
+                                onChange={handleChange}
+                                required
+                            />
+
+                            <Input
+                                label="Last Name"
+                                name="lastName"
+                                value={formData.lastName}
+                                onChange={handleChange}
+                                required
+                            />
+
+                        </div>
+
+                        <Input
+                            label="Email Address"
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                        />
+
+                        <Input
+                            label="Title"
+                            name="title"
+                            value={formData.title}
+                            onChange={handleChange}
+                            required
+                        />
+
+                        <Input
+                            label="Specialization"
+                            name="specialization"
+                            value={formData.specialization}
+                            onChange={handleChange}
+                            required
+                        />
+
+                        <div>
+
+                            <label className="block text-sm font-semibold mb-2">
+
+                                Professional Bio
+
+                            </label>
+
+                            <textarea
+
+                                name="bio"
+
+                                rows={5}
+
+                                value={formData.bio}
+
+                                onChange={handleChange}
+
+                                className="w-full rounded-lg border border-gray-300 p-3"
+
+                            />
+
+                        </div>
+
+                        <div>
+
+                            <label className="block text-sm font-semibold mb-2">
+
+                                Profile Image
+
+                            </label>
+
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageUpload}
+                            />
+
+                        </div>
+
+                        <Button
+                            type="submit"
+                            variant="primary"
+                            disabled={saving}
+                        >
+
+                            {saving
+                                ? "Updating..."
+                                : "Update Profile"}
+
+                        </Button>
+
+                    </form>
+
+                </Card>
+
+            ) : (
+
+                <Card>
+
+                    {activeTab === "About Portfolio" && (
+
+                        <div>
+
+                            <h3 className="font-bold text-lg mb-4">
+
+                                Professional Bio
+
+                            </h3>
+
+                            <p className="text-gray-600 leading-7">
+
+                                {formData.bio}
+
+                            </p>
+
+                            <div className="grid md:grid-cols-2 gap-6 mt-8">
+
+                                <div>
+
+                                    <span className="text-gray-500 text-sm">
+
+                                        Title
+
+                                    </span>
+
+                                    <p className="font-semibold">
+
+                                        {formData.title}
+
+                                    </p>
+
+                                </div>
+
+                                <div>
+
+                                    <span className="text-gray-500 text-sm">
+
+                                        Specialization
+
+                                    </span>
+
+                                    <p className="font-semibold">
+
+                                        {formData.specialization}
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    )}
+
+
+                </Card>
+
+            )}
+
+        </div>
+    );
 }

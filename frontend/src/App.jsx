@@ -36,6 +36,7 @@ import CreateCourse from './pages/instructor/CreateCourse';
 import UploadMaterial from './pages/instructor/UploadMaterial';
 import Earnings from './pages/instructor/Earnings';
 import InstructorProfile from './pages/instructor/InstructorProfile';
+import EditCourse from './pages/instructor/EditCourse';
 
 // Protected Admin Pages
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -63,7 +64,7 @@ export default function App() {
       </Route>
 
       {/* Student Protected Layout */}
-      <Route element={<ProtectedRoute allowedRoles={['student']} />}>
+      <Route element={<ProtectedRoute allowedRoles={['Student']} />}>
         <Route element={<StudentLayout />}>
           <Route path="/student/dashboard" element={<StudentDashboard />} />
           <Route path="/student/my-courses" element={<MyCourses />} />
@@ -76,29 +77,30 @@ export default function App() {
           <Route path="/student/profile" element={<StudentProfile />} />
           <Route path="/student/edit-profile" element={<EditProfile />} />
           <Route path="/student/forum" element={<Forum />} />
-          <Route path="/student/notifications" element={<Notifications />} />
+          {/* <Route path="/student/notifications" element={<Notifications />} /> */}
           <Route path="/student/chat" element={<ChatPage />} />
         </Route>
       </Route>
 
       {/* Instructor Protected Layout */}
-      <Route element={<ProtectedRoute allowedRoles={['instructor']} />}>
+      <Route element={<ProtectedRoute allowedRoles={['Instructor']} />}>
         <Route element={<InstructorLayout />}>
           <Route path="/instructor/dashboard" element={<InstructorDashboard />} />
           <Route path="/instructor/courses" element={<ManageCourses />} />
           <Route path="/instructor/create-course" element={<CreateCourse />} />
+          <Route path="/instructor/edit-course/:id" element={<EditCourse />} />
           <Route path="/instructor/upload" element={<UploadMaterial />} />
           <Route path="/instructor/earnings" element={<Earnings />} />
           <Route path="/instructor/reports" element={<Reports />} />
           <Route path="/instructor/profile" element={<InstructorProfile />} />
           <Route path="/instructor/forum" element={<Forum />} />
-          <Route path="/instructor/notifications" element={<Notifications />} />
+          {/* <Route path="/instructor/notifications" element={<Notifications />} /> */}
           <Route path="/instructor/chat" element={<ChatPage />} />
         </Route>
       </Route>
 
       {/* Admin Protected Layout */}
-      <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+      <Route element={<ProtectedRoute allowedRoles={['Administrator']} />}>
         <Route element={<AdminLayout />}>
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<UserManagement />} />
@@ -108,7 +110,7 @@ export default function App() {
           <Route path="/admin/payments" element={<AdminPayment />} />
           <Route path="/admin/profile" element={<AdminProfile />} />
           <Route path="/admin/forum" element={<Forum />} />
-          <Route path="/admin/notifications" element={<Notifications />} />
+          {/* <Route path="/admin/notifications" element={<Notifications />} /> */}
           <Route path="/admin/chat" element={<ChatPage />} />
         </Route>
       </Route>

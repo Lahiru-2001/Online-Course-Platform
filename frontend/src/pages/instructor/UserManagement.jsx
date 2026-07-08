@@ -5,45 +5,45 @@ import Footer from '../../components/Footer';
 import './UserManagement.css';
 
 const usersData = [
-  { id: 1, name: 'Amara Silva',    email: 'amara.silva@email.com',    role: 'Student',    status: 'Active',    joined: '12 Jan 2024', courses: 4, avatar: 'AS', color: 'av-blue'   },
-  { id: 2, name: 'Kasun Perera',   email: 'kasun.perera@email.com',   role: 'Student',    status: 'At Risk',   joined: '18 Feb 2024', courses: 2, avatar: 'KP', color: 'av-orange' },
-  { id: 3, name: 'Ruwan Fernando', email: 'ruwan.fernando@email.com', role: 'Instructor', status: 'Active',    joined: '05 Mar 2023', courses: 7, avatar: 'RF', color: 'av-pink'   },
-  { id: 4, name: 'Nethmi Kumari',  email: 'nethmi.k@email.com',       role: 'Student',    status: 'Inactive',  joined: '22 Apr 2024', courses: 1, avatar: 'NK', color: 'av-teal'   },
-  { id: 5, name: 'Dilshan Rajapaksa', email: 'dilshan.r@email.com',  role: 'Admin',      status: 'Active',    joined: '01 Jun 2023', courses: 0, avatar: 'DR', color: 'av-purple' },
-  { id: 6, name: 'Ishara Mendis',  email: 'ishara.m@email.com',       role: 'Instructor', status: 'Active',    joined: '14 Aug 2023', courses: 5, avatar: 'IM', color: 'av-green'  },
-  { id: 7, name: 'Priya Bandara',  email: 'priya.b@email.com',        role: 'Student',    status: 'Active',    joined: '30 Sep 2024', courses: 3, avatar: 'PB', color: 'av-red'    },
+  { id: 1, name: 'Amara Silva', email: 'amara.silva@email.com', role: 'Student', status: 'Active', joined: '12 Jan 2024', courses: 4, avatar: 'AS', color: 'av-blue' },
+  { id: 2, name: 'Kasun Perera', email: 'kasun.perera@email.com', role: 'Student', status: 'At Risk', joined: '18 Feb 2024', courses: 2, avatar: 'KP', color: 'av-orange' },
+  { id: 3, name: 'Ruwan Fernando', email: 'ruwan.fernando@email.com', role: 'Instructor', status: 'Active', joined: '05 Mar 2023', courses: 7, avatar: 'RF', color: 'av-pink' },
+  { id: 4, name: 'Nethmi Kumari', email: 'nethmi.k@email.com', role: 'Student', status: 'Inactive', joined: '22 Apr 2024', courses: 1, avatar: 'NK', color: 'av-teal' },
+  { id: 5, name: 'Dilshan Rajapaksa', email: 'dilshan.r@email.com', role: 'Admin', status: 'Active', joined: '01 Jun 2023', courses: 0, avatar: 'DR', color: 'av-purple' },
+  { id: 6, name: 'Ishara Mendis', email: 'ishara.m@email.com', role: 'Instructor', status: 'Active', joined: '14 Aug 2023', courses: 5, avatar: 'IM', color: 'av-green' },
+  { id: 7, name: 'Priya Bandara', email: 'priya.b@email.com', role: 'Student', status: 'Active', joined: '30 Sep 2024', courses: 3, avatar: 'PB', color: 'av-red' },
 ];
 
 const roleColors = {
-  Student:    'role-student',
+  Student: 'role-student',
   Instructor: 'role-instructor',
-  Admin:      'role-admin',
+  Admin: 'role-admin',
 };
 
 const statusColors = {
-  Active:   'status-active',
-  'At Risk':'status-atrisk',
+  Active: 'status-active',
+  'At Risk': 'status-atrisk',
   Inactive: 'status-inactive',
 };
 
 export default function UserManagement() {
-  const [search, setSearch]         = useState('');
+  const [search, setSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
   const [showAddModal, setShowAddModal] = useState(false);
 
   const filtered = usersData.filter(u => {
     const matchSearch = u.name.toLowerCase().includes(search.toLowerCase()) ||
-                        u.email.toLowerCase().includes(search.toLowerCase());
-    const matchRole   = roleFilter === 'All' || u.role === roleFilter;
+      u.email.toLowerCase().includes(search.toLowerCase());
+    const matchRole = roleFilter === 'All' || u.role === roleFilter;
     const matchStatus = statusFilter === 'All' || u.status === statusFilter;
     return matchSearch && matchRole && matchStatus;
   });
 
-  const totalStudents    = usersData.filter(u => u.role === 'Student').length;
+  const totalStudents = usersData.filter(u => u.role === 'Student').length;
   const totalInstructors = usersData.filter(u => u.role === 'Instructor').length;
-  const totalAdmins      = usersData.filter(u => u.role === 'Admin').length;
-  const totalActive      = usersData.filter(u => u.status === 'Active').length;
+  const totalAdmins = usersData.filter(u => u.role === 'Admin').length;
+  const totalActive = usersData.filter(u => u.status === 'Active').length;
 
   return (
     <div className="instructor-portal-layout">
